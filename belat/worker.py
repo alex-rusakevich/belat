@@ -33,4 +33,4 @@ class Worker:
         self.standart = standart
 
     def work(self):
-        print(self.standart)
+        pass

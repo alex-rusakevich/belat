@@ -83,7 +83,7 @@ class Belat_GUI:
     def start_worker(self):
         self.log("Starting...\n")
         worker = bw.Worker(self, self.file_in_path.get(), self.file_out_path.get(), 
-            self.enc_from_var.get(), self.enc_to_var.get(), self.direction,
+            self.enc_from_list.get(), self.enc_to_list.get(), self.direction,
             self.schemes[self.transl_list.current()])
         worker.work()
 
