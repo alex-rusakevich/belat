@@ -2,6 +2,7 @@ import tkinter as tk
 import tkinter.ttk as ttk
 import tkinter.filedialog as tf
 import time
+import traceback
 from tkinter import scrolledtext as st
 
 import belat.worker as bw
@@ -90,10 +91,8 @@ class Belat_GUI:
                 self.schemes[self.transl_list.current()], self.fl_types_list.get())
             worker.work()
         except Exception as e:
-            if hasattr(e, 'message'):
-                self.log("Stopped with error: \n"+str(e.message))
-            else:
-                self.log("Stopped with error: \n"+str(e)+"\n")
+            self.log("Stopped with error: \n"+str(traceback.format_exc()))
+
         self.log("Finished! It took "+str(time.time()-start_time)+" seconds.\n")
 
     def log(self, txt=""):
@@ -125,17 +124,21 @@ class Belat_GUI:
     def start(self):
         self.log("Loading schemes...\n")
         
-        self.transl_opts = []
-        self.schemes = bw.Worker.get_schemes_from_json(self.log)
-        for i in self.schemes:
-            self.transl_opts.append(i.name)
-            self.log("Loaded "+i.name+"\n")
-        
-        self.transl_list = ttk.Combobox(self.window, value=self.transl_opts)
-        self.transl_list.current(0)
-        self.transl_list.config(width=35)
-        self.transl_list.grid(row=1, column=1)
-
-        self.log("Schemes loaded!\n")
+        try:
+            self.transl_opts = []
+            self.schemes = bw.Worker.get_schemes_from_json(self.log)
+            for i in self.schemes:
+                self.transl_opts.append(i.name)
+                self.log("Loaded "+i.name+"\n")
+            
+            self.transl_list = ttk.Combobox(self.window, value=self.transl_opts)
+            self.transl_list.current(0)
+            self.transl_list.config(width=35)
+            self.transl_list.grid(row=1, column=1)
+        except:
+            self.log("Error while loading schemes: \n"+str(traceback.format_exc()))
+            self.log("Schemes did not loaded!\n")
+        else:
+            self.log("Schemes loaded!\n")
 
         self.window.mainloop()

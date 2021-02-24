@@ -1,5 +1,6 @@
 import json
 import importlib
+import traceback
 
 class Worker:
     LTC = "Lat-to-cyr"
@@ -17,10 +18,7 @@ class Worker:
                 lib = importlib.import_module("belat."+i)
                 schemes.append(lib.Scheme(log))
             except Exception as e:
-                if hasattr(e, 'message'):
-                    log("Error while loading "+i+": \n"+str(e.message))
-                else:
-                    log("Error while loading "+i+": \n"+str(e)+"\n")
+                log("Error while loading "+i+": \n"+str(traceback.format_exc()))
         return schemes
 
     def __init__(self, file_in, file_out, enc_in, enc_out, transform_direction, scheme, file_type):
