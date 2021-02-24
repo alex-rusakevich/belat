@@ -23,5 +23,14 @@ class Worker:
                     log("Error while loading "+i+": \n"+str(e)+"\n")
         return schemes
 
-    def __init__(self, GUI, file_in, file_out, enc_in, enc_out, transform_direction):
+    def __init__(self, GUI, file_in, file_out, enc_in, enc_out, transform_direction, standart):
         self.GUI = GUI
+        self.file_in = file_in
+        self.file_out = file_out
+        self.enc_in = enc_in
+        self.enc_out = enc_out
+        self.transform_direction = transform_direction
+        self.standart = standart
+
+    def work(self):
+        print(self.standart)
