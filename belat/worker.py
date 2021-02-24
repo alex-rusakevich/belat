@@ -23,14 +23,22 @@ class Worker:
                     log("Error while loading "+i+": \n"+str(e)+"\n")
         return schemes
 
-    def __init__(self, GUI, file_in, file_out, enc_in, enc_out, transform_direction, standart):
-        self.GUI = GUI
+    def __init__(self, file_in, file_out, enc_in, enc_out, transform_direction, scheme, file_type):
         self.file_in = file_in
         self.file_out = file_out
         self.enc_in = enc_in
         self.enc_out = enc_out
         self.transform_direction = transform_direction
-        self.standart = standart
+        self.scheme = scheme
+        self.file_type = file_type
 
     def work(self):
-        pass
+        if self.file_type == "txt":
+            txt = open(self.file_in, "r", encoding=self.enc_in).read()
+            
+            if self.transform_direction == self.CTL:
+                txt = self.scheme.cyr_to_lat(txt)
+            elif self.transform_direction == self.LTC:
+                txt = self.scheme.lat_to_cyr(txt)
+            
+            open(self.file_out, "w", encoding=self.enc_out).write(txt)

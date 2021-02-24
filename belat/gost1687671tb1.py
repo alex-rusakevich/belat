@@ -6,3 +6,9 @@ class Scheme(bs.Scheme):
     
     def __init__(self, log):
         self.log = log
+
+    def cyr_to_lat(self, text_in):
+        return ""
+
+    def lat_to_cyr(self, text_in):
+        return ""

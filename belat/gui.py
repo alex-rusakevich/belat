@@ -1,6 +1,7 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 import tkinter.filedialog as tf
+import time
 from tkinter import scrolledtext as st
 
 import belat.worker as bw
@@ -82,10 +83,18 @@ class Belat_GUI:
 
     def start_worker(self):
         self.log("Starting...\n")
-        worker = bw.Worker(self, self.file_in_path.get(), self.file_out_path.get(), 
-            self.enc_from_list.get(), self.enc_to_list.get(), self.direction,
-            self.schemes[self.transl_list.current()])
-        worker.work()
+        start_time = time.time()
+        try:
+            worker = bw.Worker(self.file_in_path.get(), self.file_out_path.get(), 
+                self.enc_from_list.get(), self.enc_to_list.get(), self.direction,
+                self.schemes[self.transl_list.current()], self.fl_types_list.get())
+            worker.work()
+        except Exception as e:
+            if hasattr(e, 'message'):
+                self.log("Stopped with error: \n"+str(e.message))
+            else:
+                self.log("Stopped with error: \n"+str(e)+"\n")
+        self.log("Finished! It took "+str(time.time()-start_time)+" seconds.\n")
 
     def log(self, txt=""):
         self.log_entry.config(state="normal")
