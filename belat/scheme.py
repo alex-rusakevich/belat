@@ -10,3 +10,11 @@ class Scheme:
 
     def lat_to_cyr(self, text_in):
         pass
+
+class Rule:
+
+    def __init__(self):
+        pass
+
+    def work_with(self, text, pos, regexp):
+        pass

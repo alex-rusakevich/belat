@@ -1,5 +1,6 @@
 {
     "schemes" : [
+        "classic",
         "gost1687671tb1",
         "gost1687671tb2",
         "gost7792000sysa",
