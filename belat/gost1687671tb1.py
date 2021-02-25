@@ -5,6 +5,7 @@ import re
 class Scheme(bs.Scheme):
     
     name = "ГОСТ 16876-71 от 1981 г. (табл. 1)"
+    src = "https://meganorm.ru/Data2/1/4294835/4294835719.pdf"
     
     ctl_rules = {
         "'":"''",

@@ -1,5 +1,6 @@
 class Scheme:
     name = "Scheme"
+    src = "localhost"
 
     def __init__(self, log):
         self.log = log
