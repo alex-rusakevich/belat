@@ -68,7 +68,6 @@ class Scheme(bs.Scheme):
 
         def work_with(self, text, regexp_rule):
             je_regexp = "(?<=["+self.gram_baza["l_galosn_lit"]+self.gram_baza["c_galosn_lit"]+"'ўЎ\s\n])"
-            print(je_regexp)
             ie_regexp = "(?<=["+self.gram_baza["l_zychn_lit"]+self.gram_baza["c_zychn_lit"]+"])(?<![ўЎлЛŭǓlL])"
             e_regexp = "(?<=[лЛlL])"
 
@@ -83,31 +82,35 @@ class Scheme(bs.Scheme):
             }
 
             if regexp_rule in work_group_small:
-                je_res = re.sub(je_regexp+regexp_rule,"j"+matching[regexp_rule],text)
-                je_res = re.sub("^"+regexp_rule,"j"+matching[regexp_rule],je_res)
-                ie_res = re.sub(ie_regexp+regexp_rule,"i"+matching[regexp_rule],je_res)
-                return re.sub(e_regexp+regexp_rule,matching[regexp_rule],ie_res)
+                mtch = matching[regexp_rule]
+
+                je_res = re.sub(je_regexp+regexp_rule,"j"+mtch,text)
+                je_res = re.sub("^"+regexp_rule,"j"+mtch,je_res)
+                ie_res = re.sub(ie_regexp+regexp_rule,"i"+mtch,je_res)
+                return re.sub(e_regexp+regexp_rule,mtch,ie_res)
             # З улікам суседніх літар, т.е БЕРАСТ павінен быць BIERAST, а не BIeRAST
             elif regexp_rule in work_group_big:
-                je_res = re.sub(je_regexp+regexp_rule,"J"+matching[regexp_rule.lower()],text)
-                je_res = re.sub("^"+regexp_rule,"J"+matching[regexp_rule.lower()],je_res)
-                ie_res = re.sub(ie_regexp+regexp_rule,"I"+matching[regexp_rule.lower()],je_res)
-                e_res = re.sub(e_regexp+regexp_rule,matching[regexp_rule.lower()].upper(),ie_res)
+                mtch = matching[regexp_rule.lower()]
+
+                je_res = re.sub(je_regexp+regexp_rule,"J"+mtch,text)
+                je_res = re.sub("^"+regexp_rule,"J"+mtch,je_res)
+                ie_res = re.sub(ie_regexp+regexp_rule,"I"+mtch,je_res)
+                e_res = re.sub(e_regexp+regexp_rule,mtch.upper(),ie_res)
 
                 cur_st = 0
                 vialik_lit = "["+self.gram_baza["l_vialik_lit"]+self.gram_baza["c_vialik_lit"]+"]"
-                while "J"+matching[regexp_rule.lower()] in e_res[cur_st:]:
-                    cur_st = e_res.index("J"+matching[regexp_rule.lower()], cur_st)
+                while "J"+mtch in e_res[cur_st:]:
+                    cur_st = e_res.index("J"+mtch, cur_st)
                     try:
                         if re.match(vialik_lit,e_res[cur_st-1]) or re.match(vialik_lit, e_res[cur_st+2]):
-                            e_res = e_res[:cur_st+1] + matching[regexp_rule.lower()].upper() + e_res[cur_st+2:]
+                            e_res = e_res[:cur_st+1] + mtch.upper() + e_res[cur_st+2:]
                     except IndexError:
                         continue
-                while "I"+matching[regexp_rule.lower()] in e_res[cur_st:]:
-                    cur_st = e_res.index("I"+matching[regexp_rule.lower()], cur_st)
+                while "I"+mtch in e_res[cur_st:]:
+                    cur_st = e_res.index("I"+mtch, cur_st)
                     try:
                         if re.match(vialik_lit,e_res[cur_st-1]) or re.match(vialik_lit, e_res[cur_st+2]):
-                            e_res = e_res[:cur_st+1] + matching[regexp_rule.lower()].upper() + e_res[cur_st+2:]
+                            e_res = e_res[:cur_st+1] + mtch.upper() + e_res[cur_st+2:]
                     except IndexError:
                         continue
                 return e_res
