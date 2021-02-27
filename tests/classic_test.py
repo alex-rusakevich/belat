@@ -2,8 +2,11 @@ import pytest
 import belat.classic as bc
 
 @pytest.fixture
-def dubouka_cyr():
-    return """Родная мова, цудоўная мова!
+def scheme_classic():
+    return bc.Scheme(print)
+
+def test_classic_1(scheme_classic):
+    assert scheme_classic.cyr_to_lat("""Родная мова, цудоўная мова!
 Ты нашых думак уток і аснова!
 
 Матчын дарунак ад самай калыскі,
@@ -25,11 +28,7 @@ def dubouka_cyr():
 кожнае слова вякамі стварана.
 
 І на вякі яно жыць застаецца,
-вечнае так, як народнае сэрца."""
-
-@pytest.fixture
-def dubouka_cyr():
-    return """Rodnaja mova, cudoŭnaja mova!
+вечнае так, як народнае сэрца.""") == """Rodnaja mova, cudoŭnaja mova!
 Ty našych dumak utok i asnova!
 
 Matčyn darunak ad samaj kałyski,

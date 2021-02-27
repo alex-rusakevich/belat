@@ -185,8 +185,8 @@ class Scheme(bs.Scheme):
         def work_with(self, text, regexp_rule):
             result = text
             for i in self.assim_para.keys():
-                result = re.sub(i+"(?=["+self.zmiahch+"])", self.assim_para[i], result)
-                result = re.sub(i+"(?=["+self.use_lat_lit+"]["+self.post_zmiahch+"])", 
+                result = re.sub(i+"(?=["+self.zmiahch+"])(?![(Ch)(CH)(ch)(cH)KkGgHh])", self.assim_para[i], result)
+                result = re.sub(i+"(?=["+self.use_lat_lit+"]["+self.post_zmiahch+"])(?![(Ch)(CH)(ch)(cH)KkGgHh])", 
                     self.assim_para[i], result)
             return result
 
