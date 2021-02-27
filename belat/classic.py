@@ -16,7 +16,7 @@ class Scheme(bs.Scheme):
     l_vialik_lit = "BVGDJŽZRMNOPRSTFCHČŠŁLŹŃŚǓAEOIUY"
     l_mal_lit = "bvgdjžzrlłmnoprstfchčšźńśŭaeoiuy"
 
-    c_galosn_lit = "АЕОІУЫЯЮаеоіуыяю"
+    c_galosn_lit = "АЕОІУЫЯЮЁаеоіуыяюё"
     c_zychn_lit = "БВГДЖЗЙКЛМНОПРСТУЎФХЦЧШбвгджзйклмнпрстфхцчш"
     c_vialik_lit = "БВГДЖЗЙКЛМНОПРСТУЎФХЦЧШАЕОІУЫЯЮ"
     c_mal_lit = "бвгджзйклмнпрстфхцчшаеоіуыяю"
@@ -117,6 +117,8 @@ class Scheme(bs.Scheme):
                             e_res = e_res[:cur_st+1] + mtch.upper() + e_res[cur_st+2:]
                     except IndexError:
                         continue
+                    cur_st += 2
+                cur_st = 0
                 while "I"+mtch in e_res[cur_st:]:
                     cur_st = e_res.index("I"+mtch, cur_st)
                     try:
@@ -124,7 +126,37 @@ class Scheme(bs.Scheme):
                             e_res = e_res[:cur_st+1] + mtch.upper() + e_res[cur_st+2:]
                     except IndexError:
                         continue
+                    cur_st += 2
                 return e_res
+    
+    # Дадатковая шліфоўка вялікіх ётавых
+    class ctlr_vial_jot(bs.Rule):
+        def __init__(self, gram_baza):
+            self.gram_baza = gram_baza
+
+        def work_with(self, text, regexp_rule):
+            cur_st = 0
+            vialik_lit = "["+self.gram_baza["l_vialik_lit"]+self.gram_baza["c_vialik_lit"]+"]"
+            e_res = text
+            for mtch in ["e","o","u","a"]:
+                while "J"+mtch in e_res[cur_st:]:
+                    cur_st = e_res.index("J"+mtch, cur_st)
+                    try:
+                        if re.match(vialik_lit,e_res[cur_st-1]) or re.match(vialik_lit, e_res[cur_st+2]):
+                            e_res = e_res[:cur_st+1] + mtch.upper() + e_res[cur_st+2:]
+                    except IndexError:
+                        continue
+                    cur_st += 2
+                cur_st = 0
+                while "I"+mtch in e_res[cur_st:]:
+                    cur_st = e_res.index("I"+mtch, cur_st)
+                    try:
+                        if re.match(vialik_lit,e_res[cur_st-1]) or re.match(vialik_lit, e_res[cur_st+2]):
+                            e_res = e_res[:cur_st+1] + mtch.upper() + e_res[cur_st+2:]
+                    except IndexError:
+                        continue
+                    cur_st += 2
+            return e_res
 
     # Выбар паміж Ł і L
     class ctlr_l(bs.Rule):
@@ -147,7 +179,6 @@ class Scheme(bs.Scheme):
                 return re.sub("х", "ch", text)
             elif regexp_rule == "Х":
                 ch_text = re.sub("Х", "Ch", text)
-
                 cur_st = 0
                 vialik_lit = "["+self.gram_baza["l_vialik_lit"]+self.gram_baza["c_vialik_lit"]+"]"
                 while "Ch" in ch_text[cur_st:]:
@@ -157,37 +188,42 @@ class Scheme(bs.Scheme):
                             ch_text = ch_text[:cur_st+1] + "H" + ch_text[cur_st+2:]
                     except IndexError:
                         continue
+                    cur_st += +2
                 return ch_text
 
     # Праца з З С Н 
     # Асіміляцыя па мягкасці
-    class assimil_pa_miahk(bs.Rule):
+    class ctlr_assimil_pa_miahk(bs.Rule):
         def __init__(self, gram_baza):
             self.gram_baza = gram_baza
             self.use_lat_lit = gram_baza["l_vialik_lit"]+gram_baza["l_mal_lit"]
         
         zmiahch = "LŹŃŚĆJlźńśćj"
-        post_zmiahch = "Ií" # Пасля i \u0301 - камбін. акцэнт
+        post_zmiahch = "Iií" # Пасля i \u0301 - камбін. акцэнт
 
         assim_para = {
             "Ł":"L",
             "ł":"l",
-            "Z":"Ź",
+            "Z":"Z",
             "z":"ź",
-            "N":"Ń",
+            "N":"N",
             "n":"ń",
-            "S":"Ś",
+            "S":"S",
             "s":"ś",
-            "C":"Ć",
+            "C":"C",
             "c":"ć"
         }
 
         def work_with(self, text, regexp_rule):
             result = text
             for i in self.assim_para.keys():
-                result = re.sub(i+"(?=["+self.zmiahch+"])(?![(Ch)(CH)(ch)(cH)KkGgHh])", self.assim_para[i], result)
-                result = re.sub(i+"(?=["+self.use_lat_lit+"]["+self.post_zmiahch+"])(?![(Ch)(CH)(ch)(cH)KkGgHh])", 
-                    self.assim_para[i], result)
+                aspi = self.assim_para[i]
+                result = re.sub(i+"(?=["+self.zmiahch+"])(?!(Ch|CH|ch|cH|K|k|G|g|H|h))", aspi, result)
+                result = re.sub(i+"(?=["+self.use_lat_lit+"]["+self.post_zmiahch+"])(?!(Ch|CH|ch|cH|K|k|G|g|H|h))", 
+                    aspi, result)
+            for i in self.assim_para.keys():
+                aspi = self.assim_para[i]
+                result = re.sub(i+"(?=["+self.zmiahch+"])(?!(Ch|CH|ch|cH|K|k|G|g|H|h|"+aspi+"|"+aspi.lower()+"))", aspi, result)
             return result
 
     # Праца з мягкім знакам
@@ -256,7 +292,8 @@ class Scheme(bs.Scheme):
         "Э":"E", "э":"e",
         "Ґ":"G", "ґ":"g",
         "Ь":miahk_zn(), "ь":miahk_zn(),
-        "assimil":assimil_pa_miahk(gram_baza)
+        "assimil":ctlr_assimil_pa_miahk(gram_baza),
+        "vial_jot":ctlr_vial_jot(gram_baza)
     }
 
     ltc_rules = {
@@ -266,6 +303,9 @@ class Scheme(bs.Scheme):
     def cyr_to_lat(self, text_in):
         result = text_in
         for character in self.ctl_rules.keys():
+            #print(result,"\n")
+            #print(" ↓↓↓ ")
+            #print(character)
             if isinstance(self.ctl_rules[character], str):
                 result = re.sub(character, self.ctl_rules[character], result)
 
@@ -274,6 +314,6 @@ class Scheme(bs.Scheme):
         return result
 
     def lat_to_cyr(self, text_in):
-        self.log("<THIS OPTION IS NOT READY YET>")
+        self.log("<THIS OPTION IS NOT READY YET>\n")
         return ""
     
