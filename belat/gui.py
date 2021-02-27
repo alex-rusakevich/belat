@@ -80,6 +80,7 @@ class Belat_GUI:
         self.start_button.config(width=7, command=self.start_worker)
         self.start_button.grid(row=1, column=3, rowspan=2, sticky="nesw")
 
+        self.version = version
         self.log("Hello! Belat's version is "+version+"\n")
 
     def start_worker(self):
@@ -88,7 +89,7 @@ class Belat_GUI:
         try:
             worker = bw.Worker(self.file_in_path.get(), self.file_out_path.get(), 
                 self.enc_from_list.get(), self.enc_to_list.get(), self.direction,
-                self.schemes[self.transl_list.current()], self.fl_types_list.get())
+                self.schemes[self.transl_list.current()], self.fl_types_list.get(), self.version)
             worker.work()
         except Exception as e:
             self.log("Stopped with error: \n"+str(traceback.format_exc()))

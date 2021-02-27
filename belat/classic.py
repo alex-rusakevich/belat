@@ -5,7 +5,7 @@ import re
 class Scheme(bs.Scheme):
 
     name = "Класічная лацінка"
-    src = "https://baltoslav.eu/lat/index.php?mova=by"
+    src = "https://baltoslav.eu/lat/index.php?mova=by https://www.zedlik.com/pragramy/kir2lac-online/"
 
     def __init__(self, log):
         self.log = log
@@ -196,22 +196,25 @@ class Scheme(bs.Scheme):
     class ctlr_assimil_pa_miahk(bs.Rule):
         def __init__(self, gram_baza):
             self.gram_baza = gram_baza
-            self.use_lat_lit = gram_baza["l_vialik_lit"]+gram_baza["l_mal_lit"]
+            self.use_lat_lit = gram_baza["l_zychn_lit"]
         
         zmiahch = "LŹŃŚĆJlźńśćj"
         post_zmiahch = "Iií" # Пасля i \u0301 - камбін. акцэнт
 
         assim_para = {
-            "Ł":"L",
-            "ł":"l",
             "Z":"Z",
             "z":"ź",
-            "N":"N",
-            "n":"ń",
             "S":"S",
             "s":"ś",
             "C":"C",
             "c":"ć"
+        }
+
+        assim_para_n_l = {
+            "N":"Ń",
+            "n":"ń",
+            "Ł":"L",
+            "ł":"l"
         }
 
         def work_with(self, text, regexp_rule):
@@ -221,9 +224,22 @@ class Scheme(bs.Scheme):
                 result = re.sub(i+"(?=["+self.zmiahch+"])(?!(Ch|CH|ch|cH|K|k|G|g|H|h))", aspi, result)
                 result = re.sub(i+"(?=["+self.use_lat_lit+"]["+self.post_zmiahch+"])(?!(Ch|CH|ch|cH|K|k|G|g|H|h))", 
                     aspi, result)
+            #Шліфоўка
             for i in self.assim_para.keys():
                 aspi = self.assim_para[i]
                 result = re.sub(i+"(?=["+self.zmiahch+"])(?!(Ch|CH|ch|cH|K|k|G|g|H|h|"+aspi+"|"+aspi.lower()+"))", aspi, result)
+            
+            # пераўтварэнне падвоенных л і н
+            # nasiennie -> nasieńnie
+            for i in self.assim_para_n_l.keys():
+                if i=="n" or i=="N":
+                    aspi = self.assim_para_n_l[i]
+                    result = re.sub(i+"(?=["+i+i.upper()+"]["+self.post_zmiahch+"])(?!(Ch|CH|ch|cH|K|k|G|g|H|h))", 
+                        aspi, result)
+                elif i=="ł" or i=="Ł":
+                    aspi = self.assim_para_n_l[i]
+                    result = re.sub(i+"(?=["+aspi+aspi.upper()+"])(?!(Ch|CH|ch|cH|K|k|G|g|H|h))", 
+                        aspi, result)
             return result
 
     # Праца з мягкім знакам
