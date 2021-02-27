@@ -167,7 +167,7 @@ class Scheme(bs.Scheme):
             self.use_lat_lit = gram_baza["l_vialik_lit"]+gram_baza["l_mal_lit"]
         
         zmiahch = "LŹŃŚĆJlźńśćj"
-        post_zmiahch = "Ií"
+        post_zmiahch = "Ií" # Пасля i \u0301 - камбін. акцэнт
 
         assim_para = {
             "Ł":"L",
@@ -188,6 +188,30 @@ class Scheme(bs.Scheme):
                 result = re.sub(i+"(?=["+self.zmiahch+"])", self.assim_para[i], result)
                 result = re.sub(i+"(?=["+self.use_lat_lit+"]["+self.post_zmiahch+"])", 
                     self.assim_para[i], result)
+            return result
+
+    # Праца з мягкім знакам
+    class miahk_zn(bs.Rule):
+        def __init__(self):
+            pass
+
+        maihk_para = {
+            "Ł":"L",
+            "ł":"l",
+            "Z":"Ź",
+            "z":"ź",
+            "N":"Ń",
+            "n":"ń",
+            "S":"Ś",
+            "s":"ś",
+            "C":"Ć",
+            "c":"ć"
+        }
+
+        def work_with(self, text, regexp_rule):
+            result = text
+            for i in self.maihk_para.keys():
+                result = re.sub(i+"[Ьь]", self.maihk_para[i], result)
             return result
 
     ctl_rules = {
@@ -229,9 +253,9 @@ class Scheme(bs.Scheme):
         "Ч":"Č", "ч":"č",
         "Ш":"Š", "ш":"š",
         "Ы":"Y", "ы":"y",
-        "Ь":"\u0301", "ь":"\u0301",
         "Э":"E", "э":"e",
         "Ґ":"G", "ґ":"g",
+        "Ь":miahk_zn(), "ь":miahk_zn(),
         "assimil":assimil_pa_miahk(gram_baza)
     }
 
