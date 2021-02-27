@@ -309,7 +309,8 @@ class Scheme(bs.Scheme):
         "Ґ":"G", "ґ":"g",
         "Ь":miahk_zn(), "ь":miahk_zn(),
         "assimil":ctlr_assimil_pa_miahk(gram_baza),
-        "vial_jot":ctlr_vial_jot(gram_baza)
+        "vial_jot":ctlr_vial_jot(gram_baza),
+        "'":""
     }
 
     ltc_rules = {

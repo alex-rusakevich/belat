@@ -87,9 +87,11 @@ class Worker:
 
                 xhtml_files = []
                 for dir_file in os.listdir(files_dir):
-                    if dir_file[dir_file.rindex("."):].lower() == ".xhtml":
-                        xhtml_files.append(os.path.join(files_dir, dir_file))
+                    if "." in dir_file:
+                        if dir_file[dir_file.rindex("."):].lower() == ".xhtml":
+                            xhtml_files.append(os.path.join(files_dir, dir_file))
 
+                print(xhtml_files)
                 # Working with a file
                 for xhtml_file in xhtml_files:
                     f = open(xhtml_file, "r", encoding=self.enc_in)
