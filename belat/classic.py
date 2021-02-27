@@ -5,7 +5,7 @@ import re
 class Scheme(bs.Scheme):
 
     name = "Класічная лацінка"
-    src = "https://baltoslav.eu/lat/index.php?mova=by"
+    src = "https://baltoslav.eu/lat/index.php?mova=by https://www.zedlik.com/pragramy/kir2lac-online/"
 
     def __init__(self, log):
         self.log = log
