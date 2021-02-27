@@ -1,3 +1,10 @@
+from bs4 import BeautifulSoup
+import xml.etree.ElementTree as et
+import zipfile
+import shutil
+import os.path
+import os
+import re
 import json
 import importlib
 import traceback
@@ -21,7 +28,7 @@ class Worker:
                 log("Error while loading "+i+": \n"+str(traceback.format_exc()))
         return schemes
 
-    def __init__(self, file_in, file_out, enc_in, enc_out, transform_direction, scheme, file_type):
+    def __init__(self, file_in, file_out, enc_in, enc_out, transform_direction, scheme, file_type, version):
         self.file_in = file_in
         self.file_out = file_out
         self.enc_in = enc_in
@@ -29,6 +36,7 @@ class Worker:
         self.transform_direction = transform_direction
         self.scheme = scheme
         self.file_type = file_type
+        self.version = version
 
     def work(self):
         if self.file_type == "txt":
@@ -40,3 +48,47 @@ class Worker:
                 txt = self.scheme.lat_to_cyr(txt)
             
             open(self.file_out, "w", encoding=self.enc_out).write(txt)
+        elif self.file_type == "epub":
+            with zipfile.ZipFile(self.file_in, "r") as zf:
+                zf.extractall("__TEMP__")
+
+                root_node = et.parse(os.path.join("__TEMP__", "META-INF", 
+                    "container.xml")).getroot()
+
+                full_path = root_node[0][0].attrib["full-path"]
+
+                files_dir = os.path.join("__TEMP__", os.path.split(full_path)[0])
+                xhtml_files = []
+                for dir_file in os.listdir(files_dir):
+                    if dir_file[dir_file.rindex("."):].lower() == ".xhtml":
+                        xhtml_files.append(os.path.join(files_dir, dir_file))
+                
+                # Working with a file
+                for xhtml_file in xhtml_files:
+                    f = open(xhtml_file, "r", encoding=self.enc_in)
+                    text = f.read()
+                    soup = BeautifulSoup(text, features="xml")
+
+                    if self.transform_direction == self.CTL:
+                        for p in soup.find_all("p"):
+                            if p.string:
+                                p.string = self.scheme.cyr_to_lat(p.string)
+                    elif self.transform_direction == self.CTL:
+                        for p in soup.find_all("p"):
+                            if p.string:
+                                p.string = self.scheme.lat_to_cyr(p.string)
+
+                    f.close()
+
+                    xhtml = soup.prettify()
+                    with open(xhtml_file, "w", encoding=self.enc_in) as file:
+                        file.write("<!--@belat: "+self.version+"-->\n")
+                        file.write(xhtml)
+
+                with zipfile.ZipFile(self.file_out, "w", zipfile.ZIP_DEFLATED) as zf:
+                    for root, dirs, files in os.walk("__TEMP__"):
+                        for file in files:
+                            zf.write(os.path.join(root, file), os.path.relpath(os.path.join(root, file), os.path.join("__TEMP__")))
+
+                shutil.rmtree("__TEMP__")
+
