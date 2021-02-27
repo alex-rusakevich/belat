@@ -58,11 +58,38 @@ class Worker:
                 full_path = root_node[0][0].attrib["full-path"]
 
                 files_dir = os.path.join("__TEMP__", os.path.split(full_path)[0])
+
+                # Транслітуем імя аўтара, назву кнігі і г.д.
+                f = open(os.path.join(files_dir,"content.opf"), "r", encoding=self.enc_in)
+                text = f.read()
+                soup = BeautifulSoup(text, features="xml")
+
+                if self.transform_direction == self.CTL:
+                    soup.find("dc:title").string = self.scheme.cyr_to_lat(soup.find("dc:title").string)
+                    for i in soup.find_all("dc:creator"):
+                        i.string = self.scheme.cyr_to_lat(i.string)
+                elif self.transform_direction == self.LTC:
+                    soup.find("dc:title").string = self.scheme.lat_to_cyr(soup.find("dc:title").string)
+                    for i in soup.find_all("dc:creator"):
+                        i.string = self.scheme.lat_to_cyr(i.string)
+
+                # Дабаўляем тэг
+                tag = soup.new_tag("dc:subject")
+                tag.string = "be_lat"
+                soup.find("metadata").append(tag)
+
+                f.close()
+                xhtml = soup.prettify()
+                with open(os.path.join(files_dir,"content.opf"), "w", encoding=self.enc_out) as file:
+                    file.write("<!--@belat: "+self.version+"-->\n")
+                    file.write(xhtml)
+                # ==========================================
+
                 xhtml_files = []
                 for dir_file in os.listdir(files_dir):
                     if dir_file[dir_file.rindex("."):].lower() == ".xhtml":
                         xhtml_files.append(os.path.join(files_dir, dir_file))
-                
+
                 # Working with a file
                 for xhtml_file in xhtml_files:
                     f = open(xhtml_file, "r", encoding=self.enc_in)
@@ -72,12 +99,15 @@ class Worker:
                     if self.transform_direction == self.CTL:
                         for p in soup.find_all("p"):
                             if p.string:
-                                p.string = self.scheme.cyr_to_lat(p.string)
+                                p.string.replace_with(self.scheme.cyr_to_lat(p.string))
+                            for c in p.contents:
+                                c.string.replace_with(self.scheme.cyr_to_lat(c.string))
                     elif self.transform_direction == self.CTL:
                         for p in soup.find_all("p"):
                             if p.string:
-                                p.string = self.scheme.lat_to_cyr(p.string)
-
+                                p.string.replace_with(self.scheme.lat_to_cyr(p.string))
+                            for c in p.contents:
+                                c.string.replace_with(self.scheme.cyr_to_lat(c.string))
                     f.close()
 
                     xhtml = soup.prettify()
