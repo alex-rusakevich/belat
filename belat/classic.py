@@ -65,7 +65,7 @@ class Scheme(bs.Scheme):
             elif regexp_rule == "Г":
                 return re.sub("Г", "H", result)
 
-    # Праца з літарамі Е, Ю, Ё, Я, е, ю, ё, я
+    # Праца з літарамі Е, Ю, Ё, Я, е, ю, ё, я (з ётавымі)
     # Правіла (на прыкладзе Е):
     # Je je - у пачатку слова, пасля галосных, пасля апострафа, пасля ў
     # Ie ie - пасля зычных, акрамя ў і л
@@ -159,12 +159,36 @@ class Scheme(bs.Scheme):
                         continue
                 return ch_text
 
+    # Праца з З С Н 
+    # Асіміляцыя па мягкасці
     class assimil_pa_miahk(bs.Rule):
         def __init__(self, gram_baza):
             self.gram_baza = gram_baza
+            self.use_lat_lit = gram_baza["l_vialik_lit"]+gram_baza["l_mal_lit"]
         
+        zmiahch = "LŹŃŚĆJlźńśćj"
+        post_zmiahch = "Ií"
+
+        assim_para = {
+            "Ł":"L",
+            "ł":"l",
+            "Z":"Ź",
+            "z":"ź",
+            "N":"Ń",
+            "n":"ń",
+            "S":"Ś",
+            "s":"ś",
+            "C":"Ć",
+            "c":"ć"
+        }
+
         def work_with(self, text, regexp_rule):
-            pass
+            result = text
+            for i in self.assim_para.keys():
+                result = re.sub(i+"(?=["+self.zmiahch+"])", self.assim_para[i], result)
+                result = re.sub(i+"(?=["+self.use_lat_lit+"]["+self.post_zmiahch+"])", 
+                    self.assim_para[i], result)
+            return result
 
     ctl_rules = {
         "г":ctlr_g(), "Г":ctlr_g(),
@@ -207,7 +231,8 @@ class Scheme(bs.Scheme):
         "Ы":"Y", "ы":"y",
         "Ь":"\u0301", "ь":"\u0301",
         "Э":"E", "э":"e",
-        "Ґ":"G", "ґ":"g"
+        "Ґ":"G", "ґ":"g",
+        "assimil":assimil_pa_miahk(gram_baza)
     }
 
     ltc_rules = {
