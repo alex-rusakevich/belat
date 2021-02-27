@@ -48,7 +48,7 @@ class Scheme(bs.Scheme):
                     # GуЗіК
                     try:
                         count = 0
-                        while not re.match("\s",result[cur_state]):
+                        while not re.match(r"\s",result[cur_state]):
                             if i[count] == "@":
                                 if result[cur_state] == "Г":
                                     result = result[:cur_state]+"G"+result[(cur_state+1):]
@@ -78,7 +78,7 @@ class Scheme(bs.Scheme):
             self.gram_baza = gram_baza
 
         def work_with(self, text, regexp_rule):
-            je_regexp = "(?<=["+self.gram_baza["l_galosn_lit"]+self.gram_baza["c_galosn_lit"]+"'ўЎ\s\n])"
+            je_regexp = "(?<=["+self.gram_baza["l_galosn_lit"]+self.gram_baza["c_galosn_lit"]+r"'ўЎ\s\n])"
             ie_regexp = "(?<=["+self.gram_baza["l_zychn_lit"]+self.gram_baza["c_zychn_lit"]+"])(?<![ўЎлЛŭǓlL])"
             e_regexp = "(?<=[лЛlL])"
 
