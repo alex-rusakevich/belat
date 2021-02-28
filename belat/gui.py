@@ -82,6 +82,7 @@ class Belat_GUI:
 
         self.version = version
         self.log("Hello! Belat's version is "+version+"\n")
+        self.log("https://github.com/alex-rusakevich/belat\n")
 
     def start_worker(self):
         self.log("Starting...\n")
@@ -138,7 +139,7 @@ class Belat_GUI:
             self.transl_list.grid(row=1, column=1)
         except:
             self.log("Error while loading schemes: \n"+str(traceback.format_exc()))
-            self.log("Schemes did not loaded!\n")
+            self.log("Schemes did not load!\n")
         else:
             self.log("Schemes loaded!\n")
 

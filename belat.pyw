@@ -3,5 +3,6 @@ import belat
 
 VERSION = belat.VERSION
 
-bel_gui = Belat_GUI(VERSION)
-bel_gui.start()
+if __name__ == '__main__':
+    bel_gui = Belat_GUI(VERSION)
+    bel_gui.start()
