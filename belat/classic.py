@@ -72,8 +72,6 @@ class Scheme(bs.Scheme):
     # Ie ie - пасля зычных, акрамя ў і л
     # E e - пасля л
     class ctlr_je_jo_ju_ja(bs.Rule):
-        def re_find(what, where, start):
-            return re.search(what, where, )
 
         def __init__(self, gram_baza):
             self.gram_baza = gram_baza

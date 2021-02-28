@@ -328,3 +328,9 @@ BO SYMON NIE MIEŬ SPAKOJU –
 
 def test_classic_7(scheme_classic):
     assert scheme_classic.cyr_to_lat("гузік ганак гонт мазгі нягеглы") == "guzik ganak gont mazgi niagiegły"
+
+def test_classic_8(scheme_classic):
+    assert scheme_classic.cyr_to_lat("ГУЗІК ГАНАК ГОНТ МАЗГІ НЯГЕГЛЫ") == "GUZIK GANAK GONT MAZGI NIAGIEGŁY"
+
+def test_classic_9(scheme_classic):
+    assert scheme_classic.cyr_to_lat("НЕ ДЗЕ НЕДЗЕ") == "NIE DZIE NIEDZIE"
