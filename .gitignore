@@ -1,4 +1,6 @@
 __pycache__/
+__TEST__/
+htmlcov/
 .vscode/
 *.pyc
 .coverage

@@ -325,3 +325,6 @@ ZAPYTAĆ PRA SIOJE-TOJE
 DZIEDKU DOBRAHA SVAJHO,
 BO SYMON NIE MIEŬ SPAKOJU –
 ŬSIO CIKAVIŁA JAHO."""
+
+def test_classic_7(scheme_classic):
+    assert scheme_classic.cyr_to_lat("гузік ганак гонт мазгі нягеглы") == "guzik ganak gont mazgi niagiegły"
