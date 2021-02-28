@@ -4,7 +4,7 @@ import re
 # https://baltoslav.eu/lat/index.php?mova=by
 class Scheme(bs.Scheme):
 
-    name = "Класічная лацінка"
+    name = "Афіцыйная лацінка"
     src = "https://baltoslav.eu/lat/index.php?mova=by https://www.zedlik.com/pragramy/kir2lac-online/"
 
     def __init__(self, log):
@@ -12,9 +12,9 @@ class Scheme(bs.Scheme):
 
     #Наборы літар
     l_galosn_lit = "AEOIUYaeoiuy"
-    l_zychn_lit = "BVGDJŽZRMNOPRSTFCHČŠŁLŹŃŚǓbvgdjžzrlłmnoprstfchčšźńśŭ"
-    l_vialik_lit = "BVGDJŽZRMNOPRSTFCHČŠŁLŹŃŚǓAEOIUY"
-    l_mal_lit = "bvgdjžzrlłmnoprstfchčšźńśŭaeoiuy"
+    l_zychn_lit = "BVGDJŽZRMNOPRSTFCHČŠĹLŹŃŚǓbvgdjžzrlĺmnoprstfchčšźńśŭ"
+    l_vialik_lit = "BVGDJŽZRMNOPRSTFCHČŠĹLŹŃŚǓAEOIUY"
+    l_mal_lit = "bvgdjžzrlĺmnoprstfchčšźńśŭaeoiuy"
 
     c_galosn_lit = "АЕОІУЫЯЮЁаеоіуыяюё"
     c_zychn_lit = "БВГДЖЗЙКЛМНОПРСТУЎФХЦЧШбвгджзйклмнпрстфхцчш"
@@ -28,36 +28,10 @@ class Scheme(bs.Scheme):
                    "c_vialik_lit":c_vialik_lit, "c_mal_lit":c_mal_lit}
     
     # Праца з літарай г і Г
-    # У некаторых каранях пішацца g(выбухны гук) замест h(фрыкатыўны)
     class ctlr_g(bs.Rule):
-        # @ у каранях - г або Г
-        karani = ["@узік","@анак","@онт",
-                "@узіч","@анач","@онц",
-                "@анк", "ня@е@л", "маз@і"]
 
         def work_with(self, text, regexp_rule):
             result = text
-
-            for i in self.karani:
-                cur_state = 0
-                while re.match(i.replace("@","г"), result[cur_state:], re.IGNORECASE):
-                    cur_state = re.search(i.replace("@","г"), result[cur_state:], re.IGNORECASE).start()
-                    # Параўноўваем
-                    # @узік
-                    # ГуЗіК
-                    # GуЗіК
-                    try:
-                        count = 0
-                        while not re.match(r"\s",result[cur_state]):
-                            if i[count] == "@":
-                                if result[cur_state] == "Г":
-                                    result = result[:cur_state]+"G"+result[(cur_state+1):]
-                                elif result[cur_state] == "г":
-                                    result = result[:cur_state]+"g"+result[(cur_state+1):]
-                            count += 1
-                            cur_state +=1
-                    except IndexError:
-                        continue
 
             if regexp_rule == "г":
                 return re.sub("г", "h", result)
@@ -79,8 +53,8 @@ class Scheme(bs.Scheme):
 
         def work_with(self, text, regexp_rule):
             je_regexp = "(?<=["+self.gram_baza["l_galosn_lit"]+self.gram_baza["c_galosn_lit"]+r"'ўЎ\s\n])"
-            ie_regexp = "(?<=["+self.gram_baza["l_zychn_lit"]+self.gram_baza["c_zychn_lit"]+"])(?<![ўЎлЛŭǓlL])"
-            e_regexp = "(?<=[лЛlL])"
+            ie_regexp = "(?<=["+self.gram_baza["l_zychn_lit"]+self.gram_baza["c_zychn_lit"]+"])(?<![ўЎŭǓ])"
+            e_regexp = ie_regexp
 
             work_group_small = "еёюя"
             work_group_big = "ЕЁЮЯ"
@@ -158,17 +132,6 @@ class Scheme(bs.Scheme):
                     cur_st += 2
             return e_res
 
-    # Выбар паміж Ł і L
-    class ctlr_l(bs.Rule):
-        def work_with(self, text, regexp_rule):
-            excepts = "еёіюяЕЁІЮЯ"
-            if regexp_rule == "л":
-                li = re.sub("л(?=["+excepts+"])", "l", text) 
-                return re.sub("л(?!["+excepts+"])", "ł", li)
-            elif regexp_rule == "Л":
-                li = re.sub("Л(?=["+excepts+"])", "L", text) 
-                return re.sub("Л(?!["+excepts+"])", "Ł", li)
-
     # Выбар паміж CH і Ch, ch
     class ctrl_ch(bs.Rule):
         def __init__(self, gram_baza):
@@ -191,65 +154,14 @@ class Scheme(bs.Scheme):
                     cur_st += +2
                 return ch_text
 
-    # Праца з З С Н 
-    # Асіміляцыя па мягкасці
-    class ctlr_assimil_pa_miahk(bs.Rule):
-        def __init__(self, gram_baza):
-            self.gram_baza = gram_baza
-            self.use_lat_lit = gram_baza["l_zychn_lit"]
-        
-        zmiahch = "LŹŃŚĆJlźńśćj"
-        post_zmiahch = "Iií" # Пасля i \u0301 - камбін. акцэнт
-
-        assim_para = {
-            "Z":"Z",
-            "z":"ź",
-            "S":"S",
-            "s":"ś",
-            "C":"C",
-            "c":"ć"
-        }
-
-        assim_para_n_l = {
-            "N":"Ń",
-            "n":"ń",
-            "Ł":"L",
-            "ł":"l"
-        }
-
-        def work_with(self, text, regexp_rule):
-            result = text
-            for i in self.assim_para.keys():
-                aspi = self.assim_para[i]
-                result = re.sub(i+"(?=["+self.zmiahch+"])(?!(Ch|CH|ch|cH|K|k|G|g|H|h))", aspi, result)
-                result = re.sub(i+"(?=["+self.use_lat_lit+"]["+self.post_zmiahch+"])(?!(Ch|CH|ch|cH|K|k|G|g|H|h))", 
-                    aspi, result)
-            #Шліфоўка
-            for i in self.assim_para.keys():
-                aspi = self.assim_para[i]
-                result = re.sub(i+"(?=["+self.zmiahch+"])(?!(Ch|CH|ch|cH|K|k|G|g|H|h|"+aspi+"|"+aspi.lower()+"))", aspi, result)
-            
-            # пераўтварэнне падвоенных л і н
-            # nasiennie -> nasieńnie
-            for i in self.assim_para_n_l.keys():
-                if i=="n" or i=="N":
-                    aspi = self.assim_para_n_l[i]
-                    result = re.sub(i+"(?=["+i+i.upper()+"]["+self.post_zmiahch+"])(?!(Ch|CH|ch|cH|K|k|G|g|H|h))", 
-                        aspi, result)
-                elif i=="ł" or i=="Ł":
-                    aspi = self.assim_para_n_l[i]
-                    result = re.sub(i+"(?=["+aspi+aspi.upper()+"])(?!(Ch|CH|ch|cH|K|k|G|g|H|h))", 
-                        aspi, result)
-            return result
-
     # Праца з мягкім знакам
     class miahk_zn(bs.Rule):
         def __init__(self):
             pass
 
         maihk_para = {
-            "Ł":"L",
-            "ł":"l",
+            "L":"Ĺ",
+            "l":"ĺ",
             "Z":"Ź",
             "z":"ź",
             "N":"Ń",
@@ -268,7 +180,7 @@ class Scheme(bs.Scheme):
 
     ctl_rules = {
         "г":ctlr_g(), "Г":ctlr_g(),
-        "Л":ctlr_l(), "л":ctlr_l(),
+        "Л":"L", "л":"l",
         "Х":ctrl_ch(gram_baza), "х":ctrl_ch(gram_baza),
         "Е":ctlr_je_jo_ju_ja(gram_baza), "е":ctlr_je_jo_ju_ja(gram_baza),
         "Ё":ctlr_je_jo_ju_ja(gram_baza), "ё":ctlr_je_jo_ju_ja(gram_baza),
@@ -308,7 +220,6 @@ class Scheme(bs.Scheme):
         "Э":"E", "э":"e",
         "Ґ":"G", "ґ":"g",
         "Ь":miahk_zn(), "ь":miahk_zn(),
-        "assimil":ctlr_assimil_pa_miahk(gram_baza),
         "vial_jot":ctlr_vial_jot(gram_baza),
         "'":""
     }
@@ -320,9 +231,6 @@ class Scheme(bs.Scheme):
     def cyr_to_lat(self, text_in):
         result = text_in
         for character in self.ctl_rules.keys():
-            #print(result,"\n")
-            #print(" ↓↓↓ ")
-            #print(character)
             if isinstance(self.ctl_rules[character], str):
                 result = re.sub(character, self.ctl_rules[character], result)
 
