@@ -124,3 +124,49 @@ class Worker:
 
                 shutil.rmtree("__TEMP__")
 
+        elif self.file_type == "fb2":
+            f_in = open(self.file_in, "r", encoding=self.enc_in).read()
+            soup = BeautifulSoup(f_in, features="xml")
+
+            for i in soup.find("title-info"):
+                if (i.name in ["author", "translator", "annotation", "publish-info"]):
+                    for k in i:
+                        if self.transform_direction == self.CTL:
+                            k.string = self.scheme.cyr_to_lat(k.string)
+                        elif self.transform_direction == self.LTC:
+                            k.string = self.scheme.lat_to_cyr(k.string)
+                elif i.name == "book-title":
+                    if self.transform_direction == self.CTL:
+                        i.string = self.scheme.cyr_to_lat(i.string)
+                    elif self.transform_direction == self.LTC:
+                        i.string = self.scheme.lat_to_cyr(i.string)
+
+            if self.transform_direction == self.LTC:
+                for b in soup.find_all("body"):
+                    for p in b.find_all("p"):
+                        if p.string:
+                            p.string.replace_with(self.scheme.lat_to_cyr(p.string))
+                        for c in p.contents:
+                            c.string.replace_with(self.scheme.lat_to_cyr(c.string))
+                    for p in b.find_all("v"):
+                        if p.string:
+                            p.string.replace_with(self.scheme.lat_to_cyr(p.string))
+                        for c in p.contents:
+                            c.string.replace_with(self.scheme.lat_to_cyr(c.string))
+            elif self.transform_direction == self.CTL:
+                for b in soup.find_all("body"):
+                    for p in b.find_all("p"):
+                        if p.string:
+                            p.string.replace_with(self.scheme.cyr_to_lat(p.string))
+                        for c in p.contents:
+                            c.string.replace_with(self.scheme.cyr_to_lat(c.string))
+                    for p in b.find_all("v"):
+                        if p.string:
+                            p.string.replace_with(self.scheme.cyr_to_lat(p.string))
+                        for c in p.contents:
+                            c.string.replace_with(self.scheme.cyr_to_lat(c.string))
+            
+            xhtml = soup.prettify()
+            with open(self.file_out, "w", encoding=self.enc_out) as file:
+                file.write("<!--@belat: "+self.version+"-->\n")
+                file.write(xhtml)
