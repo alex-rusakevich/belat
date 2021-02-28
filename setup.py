@@ -1,7 +1,7 @@
 from cx_Freeze import setup, Executable
 import belat
 
-includefiles = ['config.json']
+includefiles = ['config.json', "LICENSE", "README.md"]
 includes = ["belat.official", "belat.classic", "belat.gost1687671tb1", 
     "belat.gost1687671tb2", "belat.gost7792000sysa", "belat.gost7792000sysb"]
 excludes = []
