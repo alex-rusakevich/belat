@@ -1,4 +1,9 @@
 __pycache__/
+__TEST__/
+htmlcov/
 .vscode/
+dist/
+build/
 *.pyc
 .coverage
+*.spec

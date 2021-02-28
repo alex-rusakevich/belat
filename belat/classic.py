@@ -40,7 +40,8 @@ class Scheme(bs.Scheme):
 
             for i in self.karani:
                 cur_state = 0
-                while re.match(i.replace("@","г"), result[cur_state:], re.IGNORECASE):
+                while re.search(i.replace("@","г"), result[cur_state:], re.IGNORECASE) != None:
+
                     cur_state = re.search(i.replace("@","г"), result[cur_state:], re.IGNORECASE).start()
                     # Параўноўваем
                     # @узік
@@ -48,17 +49,17 @@ class Scheme(bs.Scheme):
                     # GуЗіК
                     try:
                         count = 0
-                        while not re.match(r"\s",result[cur_state]):
+                        while not re.match(r"\s",result[cur_state+count]):
                             if i[count] == "@":
-                                if result[cur_state] == "Г":
-                                    result = result[:cur_state]+"G"+result[(cur_state+1):]
-                                elif result[cur_state] == "г":
-                                    result = result[:cur_state]+"g"+result[(cur_state+1):]
+                                if result[cur_state+count] == "Г":
+                                    result = result[:cur_state+count]+"G"+result[(cur_state+count+1):]
+                                elif result[cur_state+count] == "г":
+                                    result = result[:cur_state+count]+"g"+result[(cur_state+count+1):]
                             count += 1
-                            cur_state +=1
+                        cur_state += count
                     except IndexError:
                         continue
-
+            
             if regexp_rule == "г":
                 return re.sub("г", "h", result)
 
@@ -71,8 +72,6 @@ class Scheme(bs.Scheme):
     # Ie ie - пасля зычных, акрамя ў і л
     # E e - пасля л
     class ctlr_je_jo_ju_ja(bs.Rule):
-        def re_find(what, where, start):
-            return re.search(what, where, )
 
         def __init__(self, gram_baza):
             self.gram_baza = gram_baza
