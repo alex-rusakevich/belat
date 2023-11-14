@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 lxml = "*"
 beautifulsoup4 = "*"
+pyqt6 = "*"
 
 [dev-packages]
 pipenv = "*"
@@ -13,6 +14,7 @@ pytest = "*"
 pytest-cov = "*"
 black = "*"
 isort = "*"
+pyqt6-tools = "*"
 
 [requires]
 python_version = "3.9"

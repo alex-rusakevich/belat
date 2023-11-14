@@ -6,6 +6,7 @@ import traceback
 from tkinter import scrolledtext as st
 
 import belat.worker as bw
+from belat import settings
 
 
 class Belat_GUI:
@@ -138,7 +139,7 @@ class Belat_GUI:
 
         try:
             self.transl_opts = []
-            self.schemes = bw.Worker.get_schemes_from_json(self.log)
+            self.schemes = settings.SCHEMES
             for i in self.schemes:
                 self.transl_opts.append(i.name)
                 self.log("Loaded " + i.name + "\n")

@@ -2,7 +2,7 @@ from cx_Freeze import Executable, setup
 
 import belat
 
-includefiles = ["config.json", "LICENSE", "README.md"]
+includefiles = ["LICENSE", "README.md"]
 includes = [
     "belat.official",
     "belat.classic",
