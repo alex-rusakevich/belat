@@ -1,6 +1,8 @@
 import pytest
+
 import belat.gost7792000sysa as bgsysa
 import belat.gost7792000sysb as bgsysb
+
 
 @pytest.fixture
 def dubouka_cyr():
@@ -28,6 +30,7 @@ def dubouka_cyr():
 І на вякі яно жыць застаецца,
 вечнае так, як народнае сэрца."""
 
+
 @pytest.fixture
 def dubouka_lat1():
     return """Rodnaâ mova, cudoŭnaâ mova!
@@ -53,6 +56,7 @@ kožnae slova vâkamì stvarana.
 
 Ì na vâkì âno žyc´ zastaecca,
 večnae tak, âk narodnae sèrca."""
+
 
 @pytest.fixture
 def dubouka_lat2():
@@ -80,43 +84,54 @@ kozhnae slova vyakami stvarana.
 I na vyaki yano zhy`c` zastaecca,
 vechnae tak, yak narodnae se`rca."""
 
+
 @pytest.fixture
 def scheme_sysa():
     return bgsysa.Scheme(print)
+
 
 @pytest.fixture
 def scheme_sysb():
     return bgsysb.Scheme(print)
 
+
 # Тэст на транслітэрацыю з кір у лат
 def test_gost16_sysa_1(dubouka_cyr, dubouka_lat1, scheme_sysa):
     assert scheme_sysa.cyr_to_lat(dubouka_cyr) == dubouka_lat1
+
 
 # Тэст з лат у кір
 def test_gost16_sysa_2(dubouka_cyr, dubouka_lat1, scheme_sysa):
     assert scheme_sysa.lat_to_cyr(dubouka_lat1) == dubouka_cyr
 
+
 # Тэст з кір у лат і наадварот
 def test_gost16_sysa_3(dubouka_cyr, scheme_sysa):
     assert scheme_sysa.lat_to_cyr(scheme_sysa.cyr_to_lat(dubouka_cyr)) == dubouka_cyr
+
 
 # Тэст з кір у лат і наадварот
 def test_gost16_sysa_4(dubouka_lat1, scheme_sysa):
     assert scheme_sysa.cyr_to_lat(scheme_sysa.lat_to_cyr(dubouka_lat1)) == dubouka_lat1
 
+
 # ===================================================================================
+
 
 # Тэст на транслітэрацыю з кір у лат
 def test_gost16_sysb_1(dubouka_cyr, dubouka_lat2, scheme_sysb):
     assert scheme_sysb.cyr_to_lat(dubouka_cyr) == dubouka_lat2
 
+
 # Тэст з лат у кір
 def test_gost16_sysb_2(dubouka_cyr, dubouka_lat2, scheme_sysb):
     assert scheme_sysb.lat_to_cyr(dubouka_lat2) == dubouka_cyr
 
+
 # Тэст з кір у лат і наадварот
 def test_gost16_sysb_3(dubouka_cyr, scheme_sysb):
     assert scheme_sysb.lat_to_cyr(scheme_sysb.cyr_to_lat(dubouka_cyr)) == dubouka_cyr
+
 
 # Тэст з кір у лат і наадварот
 def test_gost16_sysb_4(dubouka_lat2, scheme_sysb):

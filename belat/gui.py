@@ -1,11 +1,12 @@
-import tkinter as tk
-import tkinter.ttk as ttk
-import tkinter.filedialog as tf
 import time
+import tkinter as tk
+import tkinter.filedialog as tf
+import tkinter.ttk as ttk
 import traceback
 from tkinter import scrolledtext as st
 
 import belat.worker as bw
+
 
 class Belat_GUI:
     def __init__(self, version):
@@ -40,7 +41,9 @@ class Belat_GUI:
         self.file_in_path_entry = ttk.Entry(textvariable=self.file_in_path)
         self.file_in_path_entry.config(width=38)
         self.file_in_path_entry.grid(row=3, column=1, pady=5, padx=5)
-        self.open_button = ttk.Button(self.window, text="Open...", command=self.open_file)
+        self.open_button = ttk.Button(
+            self.window, text="Open...", command=self.open_file
+        )
         self.open_button.config(width=15)
         self.open_button.grid(row=3, column=2, sticky="nesw")
 
@@ -49,7 +52,9 @@ class Belat_GUI:
         self.file_out_path_entry = ttk.Entry(textvariable=self.file_out_path)
         self.file_out_path_entry.config(width=38)
         self.file_out_path_entry.grid(row=4, column=1, pady=5, padx=5)
-        self.save_button = ttk.Button(self.window, text="Save...", command=self.save_file)
+        self.save_button = ttk.Button(
+            self.window, text="Save...", command=self.save_file
+        )
         self.save_button.config(width=15)
         self.save_button.grid(row=4, column=2, sticky="nesw")
 
@@ -66,7 +71,9 @@ class Belat_GUI:
         self.enc_to_list.grid(row=4, column=3, pady=5, padx=5)
 
         # Lat to cyr or cyr to lat button
-        self.dir_button = ttk.Button(self.window, text=self.direction, command=self.lat_cyr)
+        self.dir_button = ttk.Button(
+            self.window, text=self.direction, command=self.lat_cyr
+        )
         self.dir_button.config(width=7)
         self.dir_button.grid(row=1, column=2, rowspan=2, sticky="nesw")
 
@@ -81,39 +88,42 @@ class Belat_GUI:
         self.start_button.grid(row=1, column=3, rowspan=2, sticky="nesw")
 
         self.version = version
-        self.log("Hello! Belat's version is "+version+"\n")
+        self.log("Hello! Belat's version is " + version + "\n")
         self.log("https://github.com/alex-rusakevich/belat\n")
 
     def start_worker(self):
         self.log("Starting...\n")
         start_time = time.time()
         try:
-            worker = bw.Worker(self.file_in_path.get(), self.file_out_path.get(), 
-                self.enc_from_list.get(), self.enc_to_list.get(), self.direction,
-                self.schemes[self.transl_list.current()], self.fl_types_list.get(), self.version)
+            worker = bw.Worker(
+                self.file_in_path.get(),
+                self.file_out_path.get(),
+                self.enc_from_list.get(),
+                self.enc_to_list.get(),
+                self.direction,
+                self.schemes[self.transl_list.current()],
+                self.fl_types_list.get(),
+                self.version,
+            )
             worker.work()
         except Exception as e:
-            self.log("Stopped with error: \n"+str(traceback.format_exc()))
+            self.log("Stopped with error: \n" + str(traceback.format_exc()))
 
-        self.log("Finished! It took "+str(time.time()-start_time)+" seconds.\n")
+        self.log("Finished! It took " + str(time.time() - start_time) + " seconds.\n")
 
     def log(self, txt=""):
         self.log_entry.config(state="normal")
         self.log_entry.insert(tk.END, txt)
         self.log_entry.config(state="disabled")
-        
+
         if txt == "":
             return self.log_entry.get(1.0, tk.END)
 
     def open_file(self):
-        self.file_in_path.set(
-            tf.askopenfilename(filetypes=[("All types", "*.*")])
-        )
+        self.file_in_path.set(tf.askopenfilename(filetypes=[("All types", "*.*")]))
 
     def save_file(self):
-        self.file_out_path.set(
-            tf.asksaveasfilename(filetypes=[("All types", "*.*")])
-        )
+        self.file_out_path.set(tf.asksaveasfilename(filetypes=[("All types", "*.*")]))
 
     def lat_cyr(self):
         if self.direction == "Cyr-to-lat":
@@ -122,23 +132,23 @@ class Belat_GUI:
         elif self.direction == "Lat-to-cyr":
             self.direction = "Cyr-to-lat"
             self.dir_button.config(text=self.direction)
-        
+
     def start(self):
         self.log("Loading schemes...\n")
-        
+
         try:
             self.transl_opts = []
             self.schemes = bw.Worker.get_schemes_from_json(self.log)
             for i in self.schemes:
                 self.transl_opts.append(i.name)
-                self.log("Loaded "+i.name+"\n")
-            
+                self.log("Loaded " + i.name + "\n")
+
             self.transl_list = ttk.Combobox(self.window, value=self.transl_opts)
             self.transl_list.current(0)
             self.transl_list.config(width=35)
             self.transl_list.grid(row=1, column=1)
         except:
-            self.log("Error while loading schemes: \n"+str(traceback.format_exc()))
+            self.log("Error while loading schemes: \n" + str(traceback.format_exc()))
             self.log("Schemes did not load!\n")
         else:
             self.log("Schemes loaded!\n")

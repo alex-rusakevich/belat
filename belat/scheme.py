@@ -11,8 +11,8 @@ class Scheme:
     def lat_to_cyr(self, text_in):
         pass
 
-class Rule:
 
+class Rule:
     def __init__(self):
         pass
 

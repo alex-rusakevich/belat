@@ -1,0 +1,18 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+lxml = "*"
+beautifulsoup4 = "*"
+
+[dev-packages]
+pipenv = "*"
+pytest = "*"
+pytest-cov = "*"
+black = "*"
+isort = "*"
+
+[requires]
+python_version = "3.9"

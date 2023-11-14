@@ -1,12 +1,17 @@
 import pytest
+
 import belat.official as bc
+
 
 @pytest.fixture
 def scheme_official():
     return bc.Scheme(print)
 
+
 def test_official_1(scheme_official):
-    assert scheme_official.cyr_to_lat("""Родная мова, цудоўная мова!
+    assert (
+        scheme_official.cyr_to_lat(
+            """Родная мова, цудоўная мова!
 Ты нашых думак уток і аснова!
 
 Матчын дарунак ад самай калыскі,
@@ -28,7 +33,9 @@ def test_official_1(scheme_official):
 кожнае слова вякамі стварана.
 
 І на вякі яно жыць застаецца,
-вечнае так, як народнае сэрца.""") == """Rodnaja mova, cudoŭnaja mova!
+вечнае так, як народнае сэрца."""
+        )
+        == """Rodnaja mova, cudoŭnaja mova!
 Ty našych dumak utok i asnova!
 
 Matčyn darunak ad samaj kalyski,
@@ -51,9 +58,13 @@ kožnaje slova viakami stvarana.
 
 I na viaki jano žyć zastajecca,
 viečnaje tak, jak narodnaje serca."""
+    )
+
 
 def test_official_2(scheme_official):
-    assert scheme_official.cyr_to_lat("""Ад родных ніў, ад роднай хаты
+    assert (
+        scheme_official.cyr_to_lat(
+            """Ад родных ніў, ад роднай хаты
 У панскі двор дзеля красы
 Яны, бяздольныя, узяты
 Ткаць залатыя паясы.
@@ -72,7 +83,9 @@ def test_official_2(scheme_official):
 Цямнее край зубчаты бора...
 І тчэ, забыўшыся, рука,
 Заміж персідскага узора,
-Цвяток радзімы васілька.""") == """Ad rodnych niŭ, ad rodnaj chaty
+Цвяток радзімы васілька."""
+        )
+        == """Ad rodnych niŭ, ad rodnaj chaty
 U panski dvor dzielia krasy
 Jany, biazdoĺnyja, uziaty
 Tkać zalatyja pajasy.
@@ -92,9 +105,13 @@ Ciamnieje kraj zubčaty bora...
 I tče, zabyŭšysia, ruka,
 Zamiž piersidskaha uzora,
 Cviatok radzimy vasiĺka."""
+    )
+
 
 def test_official_3(scheme_official):
-    assert scheme_official.cyr_to_lat("""Магутнае слова, ты, роднае слова!
+    assert (
+        scheme_official.cyr_to_lat(
+            """Магутнае слова, ты, роднае слова!
        Са мной ты на яве і ў сне;
 Душу мне затрэсла пагудкаю новай,
        Ты песень наўчыла мяне.
@@ -112,7 +129,9 @@ def test_official_3(scheme_official):
 Загнанае слова, ты, роднае слова!
        Грымі ж над радзімай зямлёй:
 Што родная мова, хоць бедная мова,
-       Мілей найбагатшай чужой!""") == """Mahutnaje slova, ty, rodnaje slova!
+       Мілей найбагатшай чужой!"""
+        )
+        == """Mahutnaje slova, ty, rodnaje slova!
        Sa mnoj ty na javie i ŭ snie;
 Dušu mnie zatresla pahudkaju novaj,
        Ty piesień naŭčyla mianie.
@@ -131,9 +150,13 @@ Zahnanaje slova, ty, rodnaje slova!
        Hrymi ž nad radzimaj ziamlioj:
 Što rodnaja mova, choć biednaja mova,
        Miliej najbahatšaj čužoj!"""
+    )
+
 
 def test_official_4(scheme_official):
-    assert scheme_official.cyr_to_lat("""Несупыннай хваляй плыні
+    assert (
+        scheme_official.cyr_to_lat(
+            """Несупыннай хваляй плыні
 За парою йшла пара,
 І прабіла час хлапчыне
 Гнаць у поле са двара.
@@ -146,7 +169,9 @@ def test_official_4(scheme_official):
 Ён цяпер глядзеў больш стала:
 Ён – асоба, пастушок,
 Нават права меў на сала
-І на цёплы кажушок.""") == """Niesupynnaj chvaliaj plyni
+І на цёплы кажушок."""
+        )
+        == """Niesupynnaj chvaliaj plyni
 Za paroju jšla para,
 I prabila čas chlapčynie
 Hnać u polie sa dvara.
@@ -160,9 +185,13 @@ Jon ciapier hliadzieŭ boĺš stala:
 Jon – asoba, pastušok,
 Navat prava mieŭ na sala
 I na cioply kažušok."""
+    )
+
 
 def test_official_5(scheme_official):
-    assert scheme_official.cyr_to_lat("""Я бачыў, як змяняе дзень
+    assert (
+        scheme_official.cyr_to_lat(
+            """Я бачыў, як змяняе дзень
 Вакол мяне гукі на колер,
 Як небасхіл пакінуў цень,
 Глытаючы слова «ніколі».
@@ -202,7 +231,9 @@ def test_official_5(scheme_official):
 Мне быць з табой, неба, небяспечна.
 неба, небяспечна
 неба, небяспечна
-неба, небяспечна.""") == """Ja bačyŭ, jak zmianiaje dzień
+неба, небяспечна."""
+        )
+        == """Ja bačyŭ, jak zmianiaje dzień
 Vakol mianie huki na kolier,
 Jak niebaschil pakinuŭ cień,
 Hlytajučy slova «nikoli».
@@ -243,9 +274,13 @@ Mnie być z taboj, nieba, niebiaspiečna.
 nieba, niebiaspiečna
 nieba, niebiaspiečna
 nieba, niebiaspiečna."""
+    )
+
 
 def test_official_6(scheme_official):
-    assert scheme_official.cyr_to_lat("""ДОБРА Ў ПОЛІ: ВОЛІ МНОГА
+    assert (
+        scheme_official.cyr_to_lat(
+            """ДОБРА Ў ПОЛІ: ВОЛІ МНОГА
 І ПРАСТОРУ-ШЫРЫНІ,
 ВАБЯЦЬ ДАЛІ ТАМ МАЛОГА,
 ЯК ПРЫНАДНЫЯ АГНІ.
@@ -264,7 +299,9 @@ def test_official_6(scheme_official):
 ЯК ГЛЫБОК ТОЙ ПРАСТОР НЕМЫ,
 І ЦІ МЕРЫЎ ЯГО ХТО?
 І АДКАЖА ПА-СВАЕМУ:
-ВЁРСТ НАПЭЎНА БУДЗЕ СТО!""") == """DOBRA Ŭ POLI: VOLI MNOHA
+ВЁРСТ НАПЭЎНА БУДЗЕ СТО!"""
+        )
+        == """DOBRA Ŭ POLI: VOLI MNOHA
 I PRASTORU-ŠYRYNI,
 VABIAĆ DALI TAM MALOHA,
 JAK PRYNADNYJA AHNI.
@@ -284,9 +321,13 @@ JAK HLYBOK TOJ PRASTOR NIEMY,
 I CI MIERYŬ JAHO CHTO?
 I ADKAŽA PA-SVAJEMU:
 VIORST NAPEŬNA BUDZIE STO!"""
+    )
+
 
 def test_official_7(scheme_official):
-    assert scheme_official.cyr_to_lat("""І ЯШЧЭ БЫЛО ЧЫМ МІЛА
+    assert (
+        scheme_official.cyr_to_lat(
+            """І ЯШЧЭ БЫЛО ЧЫМ МІЛА
 ТОЕ ПОЛЕ ХЛАПЧУКУ,
 ГЭТА ТЫМ, ШТО ДЗЕД КУРЫЛА
 ТАМ ЯГО ТРЫМАЎ РУКУ.
@@ -305,7 +346,9 @@ def test_official_7(scheme_official):
 ЗАПЫТАЦЬ ПРА СЁЕ-ТОЕ
 ДЗЕДКУ ДОБРАГА СВАЙГО,
 БО СЫМОН НЕ МЕЎ СПАКОЮ –
-ЎСЁ ЦІКАВІЛА ЯГО.""") == """I JAŠČE BYLO ČYM MILA
+ЎСЁ ЦІКАВІЛА ЯГО."""
+        )
+        == """I JAŠČE BYLO ČYM MILA
 TOJE POLIE CHLAPČUKU,
 HETA TYM, ŠTO DZIED KURYLA
 TAM JAHO TRYMAŬ RUKU.
@@ -325,3 +368,4 @@ ZAPYTAĆ PRA SIOJE-TOJE
 DZIEDKU DOBRAHA SVAJHO,
 BO SYMON NIE MIEŬ SPAKOJU –
 ŬSIO CIKAVILA JAHO."""
+    )

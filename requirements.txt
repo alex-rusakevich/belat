@@ -1,4 +1,0 @@
-pytest==6.2.2
-pytest-cov==2.11.1
-lxml==4.6.2
-beautifulsoup4==4.9.3
