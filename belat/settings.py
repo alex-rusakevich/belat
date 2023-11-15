@@ -4,11 +4,15 @@ import os
 import sys
 from pathlib import Path
 
+BASE_DIR = Path(
+    os.environ.get("BELAT_BASE_DIR", os.path.join(os.path.expanduser("~"), ".belat"))
+)
+
 DEBUG = os.environ.get("BELAT_DEBUG", True) in ["t", True, "true"]
 
 LOG_LVL = "DEBUG" if DEBUG else "WARNING"
 
-LOG_DIR = Path(os.path.join(os.path.dirname(__file__), "..", "logs"))
+LOG_DIR = Path(os.path.join(BASE_DIR, "logs"))
 
 LOGGING = {
     "version": 1,
@@ -33,7 +37,8 @@ LOGGING = {
         },
     },
     "loggers": {
-        "": {"handlers": ["default", "console"], "level": LOG_LVL, "propagate": True},
+        "": {"handlers": ["default", "console"], "level": LOG_LVL, "propagate": False},
+        "invoke": {"handlers": ["default", "console"], "level": "WARNING"},
     },
 }
 
@@ -46,6 +51,7 @@ SCHEME_MODULES = (
     "classic",
 )
 
+BASE_DIR.mkdir(parents=True, exist_ok=True)
 LOG_DIR.mkdir(parents=True, exist_ok=True)
 logging.config.dictConfig(LOGGING)
 

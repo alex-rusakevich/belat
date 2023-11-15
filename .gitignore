@@ -5,6 +5,7 @@ htmlcov/
 dist/
 build/
 node_modules/
+.belat/
 
 *.pyc
 .coverage

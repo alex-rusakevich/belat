@@ -1,6 +1,12 @@
+import os
+
 from invoke import run, task
 
-import belat
+BELAT_VERSION = (
+    open(os.path.join("belat", "VERSION.txt"), "r", encoding="utf8").read().strip()
+)
+
+os.environ["BELAT_BASE_DIR"] = ".belat"
 
 
 @task
@@ -46,6 +52,6 @@ def designer(context):
 
 @task
 def tag(context):
-    """Auto add tag to git commit depending on belat.__version__"""
-    run(f"git tag {belat.__version__}")
+    """Auto add tag to git commit depending on belat version"""
+    run(f"git tag v{BELAT_VERSION}")
     run(f"git push --tags")
