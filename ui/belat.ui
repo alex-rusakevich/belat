@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>640</width>
-    <height>480</height>
+    <height>210</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -68,7 +68,11 @@
          <widget class="QPlainTextEdit" name="plainTextEdit"/>
         </item>
         <item>
-         <widget class="QPlainTextEdit" name="plainTextEdit_2"/>
+         <widget class="QPlainTextEdit" name="plainTextEdit_2">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>

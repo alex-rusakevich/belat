@@ -1,6 +1,5 @@
 import belat
-from belat.gui import Belat_GUI
+from belat.gui import run_ui
 
 if __name__ == "__main__":
-    bel_gui = Belat_GUI(belat.__version__)
-    bel_gui.start()
+    run_ui()
