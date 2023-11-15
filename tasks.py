@@ -40,6 +40,11 @@ def install(context):
 
 
 @task
+def designer(context):
+    run("qt6-tools designer ui/belat.ui")
+
+
+@task
 def tag(context):
     """Auto add tag to git commit depending on belat.__version__"""
     run(f"git tag {belat.__version__}")
