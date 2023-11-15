@@ -9,4 +9,5 @@ node_modules/
 
 *.pyc
 .coverage
+.coveragerc
 *.spec

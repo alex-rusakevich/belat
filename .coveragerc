@@ -1,8 +1,0 @@
-[run]
-omit = 
-    ./venv
-    belat/gui.py
-concurrency = multiprocessing
-parallel = True
-source = HookTest
-data_file = .coverage
