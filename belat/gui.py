@@ -1,7 +1,7 @@
 import os
 import sys
 
-from PyQt6 import QtWidgets, uic
+from PyQt6 import QtGui, QtWidgets, uic
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -9,6 +9,7 @@ class MainWindow(QtWidgets.QMainWindow):
         super().__init__(*args, **kwargs)
         uic.loadUi(os.path.join("ui", "belat.ui"), self)
         self.setContentsMargins(11, 11, 11, 11)
+        self.setWindowIcon(QtGui.QIcon(os.path.join("ui", "icon.png")))
 
 
 app = QtWidgets.QApplication(sys.argv)
