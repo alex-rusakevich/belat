@@ -1,6 +1,7 @@
 import re
 
 import belat.schemes as bs
+from belat.exceptions import NotDoneYet
 
 
 # https://baltoslav.eu/lat/index.php?mova=by
@@ -8,8 +9,8 @@ class Scheme(bs.Scheme):
     name = "Афіцыйная лацінка"
     src = "https://baltoslav.eu/lat/index.php?mova=by https://www.zedlik.com/pragramy/kir2lac-online/"
 
-    def __init__(self, log):
-        self.log = log
+    def __init__(self):
+        pass
 
     # Наборы літар
     l_galosn_lit = "AEOIUYaeoiuy"
@@ -322,5 +323,4 @@ class Scheme(bs.Scheme):
         return result
 
     def lat_to_cyr(self, text_in):
-        self.log("<THIS OPTION IS NOT READY YET>\n")
-        return ""
+        raise NotDoneYet()

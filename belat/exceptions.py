@@ -1,0 +1,2 @@
+class NotDoneYet(Exception):
+    pass

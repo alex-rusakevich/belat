@@ -143,8 +143,8 @@ class Scheme(bs.Scheme):
         "è": "э",
     }
 
-    def __init__(self, log):
-        self.log = log
+    def __init__(self):
+        pass
 
     def cyr_to_lat(self, text_in):
         result = text_in

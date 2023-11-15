@@ -61,7 +61,7 @@ schemes_dict = {}
 for scheme_module in SCHEME_MODULES:
     try:
         lib = importlib.import_module("belat.schemes." + scheme_module)
-        scheme = lib.Scheme(print)
+        scheme = lib.Scheme()
         schemes_dict[scheme_module] = scheme
 
         logger.info(f"Loaded '{scheme_module}' ('{scheme.name}')")

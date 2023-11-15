@@ -1,10 +1,6 @@
 from belat import settings
 
 
-def log(msg):
-    print(msg)
-
-
 def main():
     scheme = settings.SCHEMES[input(f"Module name: ").lower().strip()]
     tr_direction = (
