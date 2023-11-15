@@ -7,7 +7,7 @@ build/
 node_modules/
 .belat/
 
+*.spec
 *.pyc
 .coverage
 .coveragerc
-*.spec
