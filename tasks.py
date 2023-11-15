@@ -77,7 +77,7 @@ def update_version_txt(context):
     else:
         open(os.path.join("belat", "VERSION.txt"), "w", encoding="utf8").write(NEW_VER)
         print(f"New version is {NEW_VER}")
-        run(f'git add -A . && git commit -m "Bumped version to {NEW_VER}"')
+        run(f'git add -A . && git commit -m "#bump Bumped version to {NEW_VER}"')
 
 
 @task(pre=(update_version_txt,))

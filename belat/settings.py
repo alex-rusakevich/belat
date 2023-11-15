@@ -26,7 +26,7 @@ LOGGING = {
             "class": "logging.handlers.RotatingFileHandler",
             "filename": LOG_DIR / "belat.log",
             "maxBytes": 1024 * 1024 * 5,  # 5 MB
-            "backupCount": 5,
+            "backupCount": 2,
             "formatter": "standard",
             "encoding": "utf8",
         },
