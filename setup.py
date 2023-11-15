@@ -16,7 +16,7 @@ packages = []
 
 setup(
     name="belat",
-    version=belat.VERSION,
+    version=belat.__version__,
     description="belat",
     author="Alexander Rusakevich",
     options={

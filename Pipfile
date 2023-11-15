@@ -15,6 +15,7 @@ pytest-cov = "*"
 black = "*"
 isort = "*"
 pyqt6-tools = "*"
+invoke = "*"
 
 [requires]
 python_version = "3.9"

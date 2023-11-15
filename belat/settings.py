@@ -4,7 +4,7 @@ import os
 import sys
 from pathlib import Path
 
-DEBUG = os.environ.get("DJANGO_DEBUG", True) in ["t", True, "true"]
+DEBUG = os.environ.get("BELAT_DEBUG", True) in ["t", True, "true"]
 
 LOG_LVL = "DEBUG" if DEBUG else "WARNING"
 
