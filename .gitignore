@@ -1,6 +1,7 @@
 __pycache__/
 __TEST__/
 htmlcov/
+.pytest_cache/
 dist/
 build/
 *.pyc

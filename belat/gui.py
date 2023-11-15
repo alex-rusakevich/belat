@@ -139,7 +139,7 @@ class Belat_GUI:
 
         try:
             self.transl_opts = []
-            self.schemes = settings.SCHEMES
+            self.schemes = list(settings.SCHEMES.values())
             for i in self.schemes:
                 self.transl_opts.append(i.name)
                 self.log("Loaded " + i.name + "\n")

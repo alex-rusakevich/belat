@@ -1,5 +1,3 @@
-import importlib
-
 from belat import settings
 
 
@@ -7,10 +5,17 @@ def log(msg):
     print(msg)
 
 
-lib = importlib.import_module("belat." + input(f"Module name: ").lower().strip())
-dircn = input("Direction (cyr-to-lat (ctl) or lat-to-cyr (ltc)): ").lower().strip()
+def main():
+    scheme = settings.SCHEMES[input(f"Module name: ").lower().strip()]
+    tr_direction = (
+        input("Direction (cyr-to-lat (ctl) or lat-to-cyr (ltc)): ").lower().strip()
+    )
 
-if dircn in ("ctl", "cyr-to-lat"):
-    print(lib.Scheme(log).cyr_to_lat(input("Result: ")))
-elif dircn in ("ltc", "lat-to-cyr"):
-    print(lib.Scheme(log).lat_to_cyr(input("Result: ")))
+    if tr_direction in ("ctl", "cyr-to-lat"):
+        print("Result:", scheme.cyr_to_lat(input("Text: ")))
+    elif tr_direction in ("ltc", "lat-to-cyr"):
+        print("Result:", scheme.lat_to_cyr(input("Text: ")))
+
+
+if __name__ == "__main__":
+    main()

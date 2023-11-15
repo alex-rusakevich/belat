@@ -51,16 +51,16 @@ logging.config.dictConfig(LOGGING)
 
 logger = logging.getLogger(__name__)
 
-schemes_list = []
+schemes_dict = {}
 for scheme_module in SCHEME_MODULES:
     try:
-        lib = importlib.import_module("belat." + scheme_module)
+        lib = importlib.import_module("belat.schemes." + scheme_module)
         scheme = lib.Scheme(print)
-        schemes_list.append(scheme)
+        schemes_dict[scheme_module] = scheme
 
         logger.info(f"Loaded '{scheme_module}' ('{scheme.name}')")
     except Exception as e:
         logger.exception(f"Cannot load scheme '{scheme_module}'")
         sys.exit(-1)
 
-SCHEMES = schemes_list
+SCHEMES = schemes_dict
