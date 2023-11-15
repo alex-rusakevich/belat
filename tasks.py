@@ -1,5 +1,7 @@
 from invoke import run, task
 
+import belat
+
 
 @task
 def compile(context):
@@ -35,3 +37,10 @@ def req(context):
 @task(pre=(req, compile))
 def install(context):
     ...
+
+
+@task
+def tag(context):
+    """Auto add tag to git commit depending on belat.__version__"""
+    run(f"git tag {belat.__version__}")
+    run(f"git push --tags")

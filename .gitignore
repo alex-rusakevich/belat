@@ -4,6 +4,8 @@ htmlcov/
 .pytest_cache/
 dist/
 build/
+node_modules/
+
 *.pyc
 .coverage
 *.spec
