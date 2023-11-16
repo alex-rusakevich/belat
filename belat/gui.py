@@ -2,8 +2,10 @@ import logging
 import os
 import sys
 import time
+import webbrowser
 
 from PyQt6 import QtGui, QtWidgets, uic
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QFileDialog, QMessageBox
 
 import belat
@@ -191,6 +193,15 @@ class MainWindow(QtWidgets.QMainWindow):
         # endregion
 
         self.statusBar.showMessage("Праграма гатова да працы!")
+
+    def keyPressEvent(self, e):
+        if e.key() == Qt.Key.Key_F1:
+            webbrowser.open("https://github.com/alex-rusakevich/belat")
+        elif (
+            e.key() == Qt.Key.Key_F5
+            and e.modifiers() == Qt.KeyboardModifier.AltModifier
+        ):
+            self.statusBar.showMessage("Я цябе кахаю! ❤️❤️❤️")
 
 
 app = QtWidgets.QApplication(sys.argv)
