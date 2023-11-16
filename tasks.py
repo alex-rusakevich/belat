@@ -1,7 +1,5 @@
 import os
-from curses.ascii import BEL
 from io import StringIO
-from sys import stdout
 
 from invoke import run, task
 
@@ -9,8 +7,21 @@ os.environ["BELAT_BASE_DIR"] = ".belat"
 
 
 @task
-def compile(context):
-    run("python -m compileall .")
+def build(context):
+    BELAT_VERSION = (
+        open(os.path.join("belat", "VERSION.txt"), "r", encoding="utf8").read().strip()
+    )
+
+    run(
+        f'pyinstaller \
+--name=belat-v{BELAT_VERSION} \
+--noconfirm --onefile --windowed \
+--icon "./ui/icon.ico" \
+--add-data "./belat;belat/" \
+--add-data "./ui;ui/" \
+--add-data "./cbelat.py;." \
+"./belat.py"'
+    )
 
 
 @task
@@ -37,11 +48,6 @@ def cbelat(context):
 def req(context):
     run("pipenv install")
     run("pipenv install --dev")
-
-
-@task(pre=(req, compile))
-def install(context):
-    ...
 
 
 @task

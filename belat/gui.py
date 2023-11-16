@@ -9,7 +9,7 @@ from PyQt6.QtWidgets import QFileDialog, QMessageBox
 import belat
 from belat import settings
 from belat.exceptions import NotDoneYet
-from belat.settings import get_scheme_by_name
+from belat.settings import RESOURCE_PATH, get_scheme_by_name
 from belat.worker import ALLOWED_EXT, Worker
 
 logger = logging.getLogger(__name__)
@@ -160,10 +160,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        uic.loadUi(os.path.join("ui", "belat.ui"), self)
+        uic.loadUi(os.path.join(RESOURCE_PATH, "ui", "belat.ui"), self)
 
         self.centralWidget.setContentsMargins(11, 11, 11, 11)
-        self.setWindowIcon(QtGui.QIcon(os.path.join("ui", "icon.png")))
+        self.setWindowIcon(QtGui.QIcon(os.path.join(RESOURCE_PATH, "ui", "icon.png")))
         self.setWindowTitle(f"belat v{belat.__version__}")
 
         self.connectEvents()

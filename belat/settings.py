@@ -80,3 +80,6 @@ def get_scheme_by_name(scheme_name: str):
             return v
 
     return None
+
+
+RESOURCE_PATH = Path(getattr(sys, "_MEIPASS", os.path.abspath(".")))
