@@ -1,6 +1,8 @@
+import functools
 import logging
 import os
 import sys
+import time
 
 from PyQt6 import QtGui, QtWidgets, uic
 from PyQt6.QtWidgets import QFileDialog, QMessageBox
@@ -44,56 +46,69 @@ class MainWindow(QtWidgets.QMainWindow):
             self.fileToLineEdit.setText(filename)
 
     def on_event_translate(self):
-        schemeFrom_title = self.schemeFromComboBox.currentText()
-        schemeTo_title = self.schemeToComboBox.currentText()
+        def _on_event_translate(self):
+            schemeFrom_title = self.schemeFromComboBox.currentText()
+            schemeTo_title = self.schemeToComboBox.currentText()
 
-        err_msg = QMessageBox()
-        err_msg.setIcon(QMessageBox.Icon.Critical)
-        err_msg.setWindowTitle("Памылка")
+            err_msg = QMessageBox()
+            err_msg.setIcon(QMessageBox.Icon.Critical)
+            err_msg.setWindowTitle("Памылка")
 
-        if schemeFrom_title == schemeTo_title:
-            err_msg.setText("Напрамкі трансліту не могуць быць аднолькавымі!")
-            err_msg.exec()
-            return
-
-        if "Кірыліца" not in (schemeFrom_title, schemeTo_title):
-            err_msg.setText("Адным з напрамкаў трансліта павінна быць кірыліца!")
-            err_msg.exec()
-            return
-
-        scheme = None
-        direction = ""
-
-        if schemeFrom_title == "Кірыліца":  # ctl
-            scheme = get_scheme_by_name(schemeTo_title)
-            direction = "cyr-to-lat"
-        elif schemeTo_title == "Кірыліца":  # ltc
-            scheme = get_scheme_by_name(schemeFrom_title)
-            direction = "lat-to-cyr"
-
-        if self.tabWidget.currentIndex() == 0:  # text mode
-            logger.debug("text mode")
-
-            if self.fromPlainTextEdit.toPlainText().strip() == "":
-                err_msg.setText("Тэкст для трансліту не можа быць пустым!")
+            if schemeFrom_title == schemeTo_title:
+                err_msg.setText("Напрамкі трансліту не могуць быць аднолькавымі!")
                 err_msg.exec()
                 return
 
-            text_in = self.fromPlainTextEdit.toPlainText()
-            result_txt = ""
+            if "Кірыліца" not in (schemeFrom_title, schemeTo_title):
+                err_msg.setText("Адным з напрамкаў трансліта павінна быць кірыліца!")
+                err_msg.exec()
+                return
 
-            try:
-                if direction == "lat-to-cyr":
-                    result_txt = scheme.lat_to_cyr(text_in)
-                elif direction == "cyr-to-lat":
-                    result_txt = scheme.cyr_to_lat(text_in)
-            except NotDoneYet:
-                logger.warning("NotDoneYet exception was risen and intercepted")
-                result_txt = "[Гэты напрамак трансліту яшчэ не гатовы, калі ласка, паспрабуйце іншы]"
+            scheme = None
+            direction = ""
 
-            self.toPlainTextEdit.setPlainText(result_txt)
-        else:  # file mode
-            logger.debug("file mode")
+            if schemeFrom_title == "Кірыліца":  # ctl
+                scheme = get_scheme_by_name(schemeTo_title)
+                direction = "cyr-to-lat"
+            elif schemeTo_title == "Кірыліца":  # ltc
+                scheme = get_scheme_by_name(schemeFrom_title)
+                direction = "lat-to-cyr"
+
+            if self.tabWidget.currentIndex() == 0:  # text mode
+                logger.debug("text mode")
+
+                if self.fromPlainTextEdit.toPlainText().strip() == "":
+                    err_msg.setText("Тэкст для трансліту не можа быць пустым!")
+                    err_msg.exec()
+                    return
+
+                text_in = self.fromPlainTextEdit.toPlainText()
+                result_txt = ""
+
+                try:
+                    if direction == "lat-to-cyr":
+                        result_txt = scheme.lat_to_cyr(text_in)
+                    elif direction == "cyr-to-lat":
+                        result_txt = scheme.cyr_to_lat(text_in)
+                except NotDoneYet:
+                    logger.warning("NotDoneYet exception was risen and intercepted")
+                    result_txt = "[Гэты напрамак трансліту яшчэ не гатовы, калі ласка, паспрабуйце іншы]"
+
+                self.toPlainTextEdit.setPlainText(result_txt)
+                return True
+            else:  # file mode
+                logger.debug("file mode")
+
+        start_time = time.time()
+        fn_res = _on_event_translate(self)
+        time_spent = time.time() - start_time
+
+        if fn_res != None:
+            self.statusBar.showMessage(f"Гатова! Скончана за {time_spent:.3f} с")
+        else:
+            self.statusBar.showMessage(
+                f"Адбылася памылка, выпраўце яе і паспрабуйце яшчэ раз"
+            )
 
     # endregion
 
