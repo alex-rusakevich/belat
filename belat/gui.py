@@ -1,4 +1,3 @@
-import functools
 import logging
 import os
 import sys
@@ -11,6 +10,7 @@ import belat
 from belat import settings
 from belat.exceptions import NotDoneYet
 from belat.settings import get_scheme_by_name
+from belat.worker import ALLOWED_EXT, Worker
 
 logger = logging.getLogger(__name__)
 
@@ -69,10 +69,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
             if schemeFrom_title == "Кірыліца":  # ctl
                 scheme = get_scheme_by_name(schemeTo_title)
-                direction = "cyr-to-lat"
+                direction = Worker.CTL
             elif schemeTo_title == "Кірыліца":  # ltc
                 scheme = get_scheme_by_name(schemeFrom_title)
-                direction = "lat-to-cyr"
+                direction = Worker.LTC
 
             if self.tabWidget.currentIndex() == 0:  # text mode
                 logger.debug("text mode")
@@ -86,9 +86,9 @@ class MainWindow(QtWidgets.QMainWindow):
                 result_txt = ""
 
                 try:
-                    if direction == "lat-to-cyr":
+                    if direction == Worker.LTC:
                         result_txt = scheme.lat_to_cyr(text_in)
-                    elif direction == "cyr-to-lat":
+                    elif direction == Worker.CTL:
                         result_txt = scheme.cyr_to_lat(text_in)
                 except NotDoneYet:
                     logger.warning("NotDoneYet exception was risen and intercepted")
@@ -98,6 +98,46 @@ class MainWindow(QtWidgets.QMainWindow):
                 return True
             else:  # file mode
                 logger.debug("file mode")
+                filepath_from = self.fileFromLineEdit.text()
+                filepath_to = self.fileToLineEdit.text()
+
+                _, file_from_extension = os.path.splitext(filepath_from)
+                _, file_to_extension = os.path.splitext(filepath_to)
+
+                err_msg = QMessageBox()
+                err_msg.setIcon(QMessageBox.Icon.Critical)
+                err_msg.setWindowTitle("Памылка")
+
+                if file_from_extension != file_to_extension:
+                    err_msg.setText("Файлы павінны быць аднаго тыпу!")
+                    err_msg.exec()
+                    return
+
+                if (file_from_extension not in ALLOWED_EXT) or (
+                    file_to_extension not in ALLOWED_EXT
+                ):
+                    err_msg.setText(
+                        f"Тып аднаго з файлаў не падтрымліваецца! Падтрымліваюцца тыпы {', '.join(ALLOWED_EXT)}"
+                    )
+                    err_msg.exec()
+                    return
+
+                enc_from = self.encFromComboBox.currentText()
+                enc_to = self.encToComboBox.currentText()
+                working_ext = file_from_extension[1:]
+
+                file_worker = Worker(
+                    filepath_from,
+                    filepath_to,
+                    enc_from,
+                    enc_to,
+                    direction,
+                    scheme,
+                    working_ext,
+                )
+                result = file_worker.work()
+                self.toPlainTextEdit.setPlainText(result)
+                return True
 
         start_time = time.time()
         fn_res = _on_event_translate(self)
@@ -142,6 +182,12 @@ class MainWindow(QtWidgets.QMainWindow):
         )
         self.schemeToComboBox.setCurrentIndex(official_index)
         logger.debug(f"Official scheme index is {official_index}")
+        # endregion
+
+        # region Populate file encodings
+        for enc in ("utf-8", "utf-16", "utf-32", "cp1251", "cp866", "koi8-r"):
+            self.encFromComboBox.addItem(enc)
+            self.encToComboBox.addItem(enc)
         # endregion
 
         self.statusBar.showMessage("Праграма гатова да працы!")

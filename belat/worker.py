@@ -1,14 +1,15 @@
-import importlib
-import json
 import os
 import os.path
-import re
 import shutil
-import traceback
 import xml.etree.ElementTree as et
 import zipfile
 
 from bs4 import BeautifulSoup
+
+import belat
+import belat.schemes as bs
+
+ALLOWED_EXT = (".txt", ".epub", ".fb2")
 
 
 class Worker:
@@ -17,14 +18,13 @@ class Worker:
 
     def __init__(
         self,
-        file_in,
-        file_out,
-        enc_in,
-        enc_out,
-        transform_direction,
-        scheme,
-        file_type,
-        version,
+        file_in: str,
+        file_out: str,
+        enc_in: str,
+        enc_out: str,
+        transform_direction: str,
+        scheme: bs.Scheme,
+        file_type: str,
     ):
         self.file_in = file_in
         self.file_out = file_out
@@ -33,7 +33,6 @@ class Worker:
         self.transform_direction = transform_direction
         self.scheme = scheme
         self.file_type = file_type
-        self.version = version
 
     def work(self):
         if self.file_type == "txt":
@@ -87,7 +86,7 @@ class Worker:
                 with open(
                     os.path.join(files_dir, "content.opf"), "w", encoding=self.enc_out
                 ) as file:
-                    file.write("<!--@belat: " + self.version + "-->\n")
+                    file.write("<!--@belat: " + belat.__version__ + "-->\n")
                     file.write(xhtml)
                 # ==========================================
 
@@ -120,7 +119,7 @@ class Worker:
 
                     xhtml = soup.prettify()
                     with open(xhtml_file, "w", encoding=self.enc_in) as file:
-                        file.write("<!--@belat: " + self.version + "-->\n")
+                        file.write("<!--@belat: " + belat.__version__ + "-->\n")
                         file.write(xhtml)
 
                 with zipfile.ZipFile(self.file_out, "w", zipfile.ZIP_DEFLATED) as zf:
@@ -179,5 +178,5 @@ class Worker:
 
             xhtml = soup.prettify()
             with open(self.file_out, "w", encoding=self.enc_out) as file:
-                file.write("<!--@belat: " + self.version + "-->\n")
+                file.write("<!--@belat: " + belat.__version__ + "-->\n")
                 file.write(xhtml)
