@@ -70,3 +70,13 @@ for scheme_module in SCHEME_MODULES:
         sys.exit(-1)
 
 SCHEMES = schemes_dict
+
+
+def get_scheme_by_name(scheme_name: str):
+    global SCHEMES
+
+    for v in SCHEMES.values():
+        if v.name == scheme_name:
+            return v
+
+    return None
