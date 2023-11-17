@@ -11,8 +11,8 @@ from PyQt6.QtWidgets import QFileDialog, QMessageBox
 import belat
 from belat import settings
 from belat.exceptions import NotDoneYet
+from belat.fileprocessor import FileProcessor
 from belat.settings import RESOURCE_PATH, get_scheme_by_name
-from belat.worker import ALLOWED_EXT, Worker
 
 logger = logging.getLogger(__name__)
 
@@ -71,10 +71,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
             if schemeFrom_title == "Кірыліца":  # ctl
                 scheme = get_scheme_by_name(schemeTo_title)
-                direction = Worker.CTL
+                direction = FileProcessor.CTL
             elif schemeTo_title == "Кірыліца":  # ltc
                 scheme = get_scheme_by_name(schemeFrom_title)
-                direction = Worker.LTC
+                direction = FileProcessor.LTC
 
             if self.tabWidget.currentIndex() == 0:  # text mode
                 logger.debug("text mode")
@@ -88,15 +88,19 @@ class MainWindow(QtWidgets.QMainWindow):
                 result_txt = ""
 
                 try:
-                    if direction == Worker.LTC:
+                    if direction == FileProcessor.LTC:
                         result_txt = scheme.lat_to_cyr(text_in)
-                    elif direction == Worker.CTL:
+                    elif direction == FileProcessor.CTL:
                         result_txt = scheme.cyr_to_lat(text_in)
                 except NotDoneYet:
                     logger.warning("NotDoneYet exception was risen and intercepted")
                     result_txt = "[Гэты напрамак трансліту яшчэ не гатовы, калі ласка, паспрабуйце іншы]"
 
                 self.toPlainTextEdit.setPlainText(result_txt)
+
+                if text_in.lower().strip() in ("521", "520", "я цябе кахаю"):
+                    self.setWindowTitle(f"І я цябе, сонейка ❤❤❤")
+
                 return True
             else:  # file mode
                 logger.debug("file mode")
@@ -115,11 +119,20 @@ class MainWindow(QtWidgets.QMainWindow):
                     err_msg.exec()
                     return
 
-                if (file_from_extension not in ALLOWED_EXT) or (
-                    file_to_extension not in ALLOWED_EXT
+                if (file_from_extension not in FileProcessor.ALLOWED_EXT) or (
+                    file_to_extension not in FileProcessor.ALLOWED_EXT
                 ):
                     err_msg.setText(
-                        f"Тып аднаго з файлаў не падтрымліваецца! Падтрымліваюцца тыпы {', '.join(ALLOWED_EXT)}"
+                        f"Тып аднаго з файлаў не падтрымліваецца! Падтрымліваюцца тыпы {', '.join(FileProcessor.ALLOWED_EXT)}"
+                    )
+                    err_msg.exec()
+                    return
+
+                if not os.path.exists(filepath_from) or not os.path.isfile(
+                    filepath_from
+                ):
+                    err_msg.setText(
+                        f'Шлях файла "Адкуль" ("{filepath_from}") не існуе або не з\'яўляецца файлам'
                     )
                     err_msg.exec()
                     return
@@ -128,7 +141,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 enc_to = self.encToComboBox.currentText()
                 working_ext = file_from_extension[1:]
 
-                file_worker = Worker(
+                file_worker = FileProcessor(
                     filepath_from,
                     filepath_to,
                     enc_from,

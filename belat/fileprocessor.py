@@ -9,12 +9,12 @@ from bs4 import BeautifulSoup
 import belat
 import belat.schemes as bs
 
-ALLOWED_EXT = (".txt", ".epub", ".fb2")
 
-
-class Worker:
+class FileProcessor:
     LTC = "Lat-to-cyr"
     CTL = "Cyr-to-lat"
+
+    ALLOWED_EXT = (".txt", ".epub", ".fb2")
 
     def __init__(
         self,
