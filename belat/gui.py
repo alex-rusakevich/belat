@@ -97,7 +97,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.toPlainTextEdit.setPlainText(result_txt)
 
                 if text_in.lower().strip() in ("521", "520", "я цябе кахаю"):
-                    self.setWindowTitle(f"І я цябе, сонейка ❤❤❤")
+                    self.setWindowTitle("І я цябе, сонейка ❤❤❤")
 
                 return True
             else:  # file mode
@@ -126,7 +126,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     return
 
                 if enc_from != enc_to:
-                    self.err_msg.setText(f"Файлы павінны мець адну кадзіроўку")
+                    self.err_msg.setText("Файлы павінны мець адну кадзіроўку")
                     self.err_msg.exec()
                     return
 
@@ -150,8 +150,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     scheme,
                     working_ext,
                 )
-                result = file_worker.work()
-                self.toPlainTextEdit.setPlainText(result)
+                file_worker.work()
                 return True
 
         start_time = time.time()
@@ -162,7 +161,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.statusBar.showMessage(f"Гатова! Скончана за {time_spent:.3f} с")
         else:
             self.statusBar.showMessage(
-                f"Адбылася памылка, выпраўце яе і паспрабуйце яшчэ раз"
+                "Адбылася памылка, выпраўце яе і паспрабуйце яшчэ раз"
             )
 
     def on_event_i_know_encoding(self):
@@ -220,7 +219,7 @@ class MainWindow(QtWidgets.QMainWindow):
             settings.SCHEMES["official"].name
         )
         self.schemeToComboBox.setCurrentIndex(official_index)
-        logger.debug(f"Official scheme index is {official_index}")
+        logger.debug("Official scheme index is %i", official_index)
         # endregion
 
         # region Populate file encodings
