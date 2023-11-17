@@ -26,6 +26,23 @@ class FileProcessor:
         scheme: bs.Scheme,
         file_type: str,
     ):
+        """Initialize the file processor before starting to work
+
+        :param file_in: file path in
+        :type file_in: str
+        :param file_out: file path out
+        :type file_out: str
+        :param enc_in: input file's encoding
+        :type enc_in: str
+        :param enc_out: output file's encoding
+        :type enc_out: str
+        :param transform_direction: `"Lat-to-cyr"` or `"Cyr-to-lat"`
+        :type transform_direction: str
+        :param scheme: translation scheme
+        :type scheme: bs.Scheme
+        :param file_type: one of the types specified in :obj:`belat.fileprocessor.FileProcessor.ALLOWED_EXT`
+        :type file_type: str
+        """
         self.file_in = file_in
         self.file_out = file_out
         self.enc_in = enc_in
@@ -35,6 +52,7 @@ class FileProcessor:
         self.file_type = file_type
 
     def work(self):
+        """Start processing the files previously set in :func:`belat.fileprocessor.FileProcessor.__init__`"""
         if self.file_type == "txt":
             txt = open(self.file_in, "r", encoding=self.enc_in).read()
 
@@ -56,7 +74,7 @@ class FileProcessor:
 
                 files_dir = os.path.join("__TEMP__", os.path.split(full_path)[0])
 
-                # Транслітуем імя аўтара, назву кнігі і г.д.
+                # Translit author's and book's name etc
                 f = open(
                     os.path.join(files_dir, "content.opf"), "r", encoding=self.enc_in
                 )
@@ -76,7 +94,7 @@ class FileProcessor:
                     for i in soup.find_all("dc:creator"):
                         i.string = self.scheme.lat_to_cyr(i.string)
 
-                # Дабаўляем тэг
+                # region Adding belat metatags to the file
                 tag = soup.new_tag("dc:subject")
                 tag.string = "be_lat"
                 soup.find("metadata").append(tag)
@@ -88,7 +106,7 @@ class FileProcessor:
                 ) as file:
                     file.write("<!--@belat: " + belat.__version__ + "-->\n")
                     file.write(xhtml)
-                # ==========================================
+                # endregion
 
                 xhtml_files = []
                 for dir_file in os.listdir(files_dir):
@@ -96,7 +114,6 @@ class FileProcessor:
                         if dir_file[dir_file.rindex(".") :].lower() == ".xhtml":
                             xhtml_files.append(os.path.join(files_dir, dir_file))
 
-                print(xhtml_files)
                 # Working with a file
                 for xhtml_file in xhtml_files:
                     f = open(xhtml_file, "r", encoding=self.enc_in)
@@ -122,6 +139,7 @@ class FileProcessor:
                         file.write("<!--@belat: " + belat.__version__ + "-->\n")
                         file.write(xhtml)
 
+                # Packing the files back
                 with zipfile.ZipFile(self.file_out, "w", zipfile.ZIP_DEFLATED) as zf:
                     for root, dirs, files in os.walk("__TEMP__"):
                         for file in files:
@@ -138,6 +156,7 @@ class FileProcessor:
             f_in = open(self.file_in, "r", encoding=self.enc_in).read()
             soup = BeautifulSoup(f_in, features="xml")
 
+            # region Processing meta tags
             for i in soup.find("title-info"):
                 if i.name in ["author", "translator", "annotation", "publish-info"]:
                     for k in i:
@@ -150,6 +169,7 @@ class FileProcessor:
                         i.string = self.scheme.cyr_to_lat(i.string)
                     elif self.transform_direction == self.LTC:
                         i.string = self.scheme.lat_to_cyr(i.string)
+            # endregion
 
             if self.transform_direction == self.LTC:
                 for b in soup.find_all("body"):

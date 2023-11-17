@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>640</width>
-    <height>278</height>
+    <height>304</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -133,7 +133,11 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
-           <widget class="QComboBox" name="encFromComboBox"/>
+           <widget class="QComboBox" name="encFromComboBox">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QLabel" name="label_2">
@@ -152,9 +156,20 @@
            </widget>
           </item>
           <item>
-           <widget class="QComboBox" name="encToComboBox"/>
+           <widget class="QComboBox" name="encToComboBox">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+           </widget>
           </item>
          </layout>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="iKnowFilesEncCheckBox">
+          <property name="text">
+           <string>Я дакладна ведаю, якія кадзіроўкі ў файлаў</string>
+          </property>
+         </widget>
         </item>
         <item>
          <spacer name="verticalSpacer">

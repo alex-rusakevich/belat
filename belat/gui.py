@@ -165,6 +165,20 @@ class MainWindow(QtWidgets.QMainWindow):
                 f"Адбылася памылка, выпраўце яе і паспрабуйце яшчэ раз"
             )
 
+    def on_event_i_know_encoding(self):
+        if self.iKnowFilesEncCheckBox.isChecked():
+            self.encFromComboBox.setEnabled(True)
+            self.encToComboBox.setEnabled(True)
+        else:
+            self.encFromComboBox.setEnabled(False)
+            self.encToComboBox.setEnabled(False)
+
+            encFromComboBox_index = self.encFromComboBox.findText("utf-8")
+            self.encFromComboBox.setCurrentIndex(encFromComboBox_index)
+
+            encToComboBox_index = self.encToComboBox.findText("utf-8")
+            self.encToComboBox.setCurrentIndex(encToComboBox_index)
+
     # endregion
 
     def connectEvents(self):
@@ -172,12 +186,13 @@ class MainWindow(QtWidgets.QMainWindow):
         self.openFileFromPushButton.clicked.connect(self.on_event_open_file_from)
         self.openFileToPushButton.clicked.connect(self.on_event_open_file_to)
         self.translatePushButton.clicked.connect(self.on_event_translate)
+        self.iKnowFilesEncCheckBox.stateChanged.connect(self.on_event_i_know_encoding)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         uic.loadUi(os.path.join(RESOURCE_PATH, "ui", "belat.ui"), self)
 
-        self.centralWidget.setContentsMargins(11, 11, 11, 11)
+        self.centralWidget.setContentsMargins(11, 11, 11, 0)
         self.setWindowIcon(QtGui.QIcon(os.path.join(RESOURCE_PATH, "ui", "icon.png")))
         self.setWindowTitle(f"belat v{belat.__version__}")
 
