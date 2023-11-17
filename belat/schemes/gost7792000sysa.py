@@ -5,7 +5,7 @@ import belat.schemes as bs
 
 # https://files.stroyinf.ru/Data2/1/4294816/4294816248.pdf
 class Scheme(bs.Scheme):
-    name = "ГОСТ 7.79-2000, система А"
+    name = "ДАСТ 7.79-2000, сістэма А"
     src = "https://files.stroyinf.ru/Data2/1/4294816/4294816248.pdf"
 
     ctl_rules = {

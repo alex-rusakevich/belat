@@ -5,7 +5,7 @@ import belat.schemes as bs
 
 # https://meganorm.ru/Data2/1/4294835/4294835719.pdf
 class Scheme(bs.Scheme):
-    name = "ГОСТ 16876-71 от 1981 г. (табл. 2)"
+    name = "ДАСТ 16876-71 ад 1981 г. (табл. 2)"
     src = "https://meganorm.ru/Data2/1/4294835/4294835719.pdf"
 
     ctl_rules = {

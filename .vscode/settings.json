@@ -7,5 +7,5 @@
             "source.organizeImports": true
         },
     },
-    "python.analysis.typeCheckingMode": "off"
+    "python.analysis.typeCheckingMode": "basic"
 }

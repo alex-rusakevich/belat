@@ -3,16 +3,19 @@ import logging.config
 import os
 import sys
 from pathlib import Path
+from typing import Dict, Optional
 
-BASE_DIR = Path(
+from belat.schemes import Scheme
+
+BASE_DIR: Path = Path(
     os.environ.get("BELAT_BASE_DIR", os.path.join(os.path.expanduser("~"), ".belat"))
 )
 
-DEBUG = os.environ.get("BELAT_DEBUG", True) in ["t", True, "true"]
+DEBUG: bool = os.environ.get("BELAT_DEBUG", True) in ["t", True, "true"]
 
-LOG_LVL = "DEBUG" if DEBUG else "WARNING"
+LOG_LVL: str = "DEBUG" if DEBUG else "WARNING"
 
-LOG_DIR = Path(os.path.join(BASE_DIR, "logs"))
+LOG_DIR: Path = Path(os.path.join(BASE_DIR, "logs"))
 
 LOGGING = {
     "version": 1,
@@ -69,10 +72,17 @@ for scheme_module in SCHEME_MODULES:
         logger.exception(f"Cannot load scheme '{scheme_module}'")
         sys.exit(-1)
 
-SCHEMES = schemes_dict
+SCHEMES: Dict[str, Scheme] = schemes_dict
 
 
-def get_scheme_by_name(scheme_name: str):
+def get_scheme_by_name(scheme_name: str) -> Optional[Scheme]:
+    """Get scheme by it's `.name` property
+
+    :param scheme_name: `.name` value of the searched scheme
+    :type scheme_name: str
+    :return: :class:`belat.schemes.Scheme` if found, `None` otherwise
+    :rtype: Optional[Scheme]
+    """
     global SCHEMES
 
     for v in SCHEMES.values():
