@@ -110,6 +110,9 @@ class MainWindow(QtWidgets.QMainWindow):
                 _, file_from_extension = os.path.splitext(filepath_from)
                 _, file_to_extension = os.path.splitext(filepath_to)
 
+                enc_from = self.encFromComboBox.currentText()
+                enc_to = self.encToComboBox.currentText()
+
                 err_msg = QMessageBox()
                 err_msg.setIcon(QMessageBox.Icon.Critical)
                 err_msg.setWindowTitle("Памылка")
@@ -128,6 +131,11 @@ class MainWindow(QtWidgets.QMainWindow):
                     err_msg.exec()
                     return
 
+                if enc_from != enc_to:
+                    err_msg.setText(f"Файлы павінны мець адну кадзіроўку")
+                    err_msg.exec()
+                    return
+
                 if not os.path.exists(filepath_from) or not os.path.isfile(
                     filepath_from
                 ):
@@ -137,8 +145,6 @@ class MainWindow(QtWidgets.QMainWindow):
                     err_msg.exec()
                     return
 
-                enc_from = self.encFromComboBox.currentText()
-                enc_to = self.encToComboBox.currentText()
                 working_ext = file_from_extension[1:]
 
                 file_worker = FileProcessor(
