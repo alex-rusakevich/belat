@@ -52,18 +52,16 @@ class MainWindow(QtWidgets.QMainWindow):
             schemeFrom_title = self.schemeFromComboBox.currentText()
             schemeTo_title = self.schemeToComboBox.currentText()
 
-            err_msg = QMessageBox()
-            err_msg.setIcon(QMessageBox.Icon.Critical)
-            err_msg.setWindowTitle("Памылка")
-
             if schemeFrom_title == schemeTo_title:
-                err_msg.setText("Напрамкі трансліту не могуць быць аднолькавымі!")
-                err_msg.exec()
+                self.err_msg.setText("Напрамкі трансліту не могуць быць аднолькавымі!")
+                self.err_msg.exec()
                 return
 
             if "Кірыліца" not in (schemeFrom_title, schemeTo_title):
-                err_msg.setText("Адным з напрамкаў трансліта павінна быць кірыліца!")
-                err_msg.exec()
+                self.err_msg.setText(
+                    "Адным з напрамкаў трансліта павінна быць кірыліца!"
+                )
+                self.err_msg.exec()
                 return
 
             scheme = None
@@ -80,8 +78,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 logger.debug("text mode")
 
                 if self.fromPlainTextEdit.toPlainText().strip() == "":
-                    err_msg.setText("Тэкст для трансліту не можа быць пустым!")
-                    err_msg.exec()
+                    self.err_msg.setText("Тэкст для трансліту не можа быць пустым!")
+                    self.err_msg.exec()
                     return
 
                 text_in = self.fromPlainTextEdit.toPlainText()
@@ -113,36 +111,32 @@ class MainWindow(QtWidgets.QMainWindow):
                 enc_from = self.encFromComboBox.currentText()
                 enc_to = self.encToComboBox.currentText()
 
-                err_msg = QMessageBox()
-                err_msg.setIcon(QMessageBox.Icon.Critical)
-                err_msg.setWindowTitle("Памылка")
-
                 if file_from_extension != file_to_extension:
-                    err_msg.setText("Файлы павінны быць аднаго тыпу!")
-                    err_msg.exec()
+                    self.err_msg.setText("Файлы павінны быць аднаго тыпу!")
+                    self.err_msg.exec()
                     return
 
                 if (file_from_extension not in FileProcessor.ALLOWED_EXT) or (
                     file_to_extension not in FileProcessor.ALLOWED_EXT
                 ):
-                    err_msg.setText(
+                    self.err_msg.setText(
                         f"Тып аднаго з файлаў не падтрымліваецца! Падтрымліваюцца тыпы {', '.join(FileProcessor.ALLOWED_EXT)}"
                     )
-                    err_msg.exec()
+                    self.err_msg.exec()
                     return
 
                 if enc_from != enc_to:
-                    err_msg.setText(f"Файлы павінны мець адну кадзіроўку")
-                    err_msg.exec()
+                    self.err_msg.setText(f"Файлы павінны мець адну кадзіроўку")
+                    self.err_msg.exec()
                     return
 
                 if not os.path.exists(filepath_from) or not os.path.isfile(
                     filepath_from
                 ):
-                    err_msg.setText(
+                    self.err_msg.setText(
                         f'Шлях файла "Адкуль" ("{filepath_from}") не існуе або не з\'яўляецца файлам'
                     )
-                    err_msg.exec()
+                    self.err_msg.exec()
                     return
 
                 working_ext = file_from_extension[1:]
@@ -201,6 +195,15 @@ class MainWindow(QtWidgets.QMainWindow):
         self.centralWidget.setContentsMargins(11, 11, 11, 0)
         self.setWindowIcon(QtGui.QIcon(os.path.join(RESOURCE_PATH, "ui", "icon.png")))
         self.setWindowTitle(f"belat v{belat.__version__}")
+
+        # region Initializing error window
+        self.err_msg = QMessageBox()
+        self.err_msg.setIcon(QMessageBox.Icon.Critical)
+        self.err_msg.setWindowTitle("Памылка")
+        self.err_msg.setWindowIcon(
+            QtGui.QIcon(os.path.join(RESOURCE_PATH, "ui", "error.png"))
+        )
+        # endregion
 
         self.connectEvents()
 
