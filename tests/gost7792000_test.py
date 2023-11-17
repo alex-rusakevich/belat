@@ -1,7 +1,7 @@
 import pytest
 
-import belat.gost7792000sysa as bgsysa
-import belat.gost7792000sysb as bgsysb
+import belat.schemes.gost7792000sysa as bgsysa
+import belat.schemes.gost7792000sysb as bgsysb
 
 
 @pytest.fixture
@@ -87,12 +87,12 @@ vechnae tak, yak narodnae se`rca."""
 
 @pytest.fixture
 def scheme_sysa():
-    return bgsysa.Scheme(print)
+    return bgsysa.Scheme()
 
 
 @pytest.fixture
 def scheme_sysb():
-    return bgsysb.Scheme(print)
+    return bgsysb.Scheme()
 
 
 # Тэст на транслітэрацыю з кір у лат

@@ -1,7 +1,7 @@
 import pytest
 
-import belat.gost1687671tb1 as bgtb1
-import belat.gost1687671tb2 as bgtb2
+import belat.schemes.gost1687671tb1 as bgtb1
+import belat.schemes.gost1687671tb2 as bgtb2
 
 
 @pytest.fixture
@@ -87,12 +87,12 @@ vechnae tak, jak narodnae sehrca."""
 
 @pytest.fixture
 def scheme_tb1():
-    return bgtb1.Scheme(print)
+    return bgtb1.Scheme()
 
 
 @pytest.fixture
 def scheme_tb2():
-    return bgtb2.Scheme(print)
+    return bgtb2.Scheme()
 
 
 # Тэст на транслітэрацыю з кір у лат

@@ -1,11 +1,11 @@
 import pytest
 
-import belat.classic as bc
+import belat.schemes.classic as bc
 
 
 @pytest.fixture
 def scheme_classic():
-    return bc.Scheme(print)
+    return bc.Scheme()
 
 
 def test_classic_1(scheme_classic):
