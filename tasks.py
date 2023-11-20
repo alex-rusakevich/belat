@@ -16,7 +16,7 @@ def build(context):
         f'pyinstaller \
 --name=belat-v{BELAT_VERSION} \
 --noconfirm --onefile --windowed \
---icon "./ui/icon.ico" \
+--icon "./ui/icons/favicon.ico" \
 --add-data "./belat;belat/" \
 --add-data "./ui;ui/" \
 --add-data "./cbelat.py;." \

@@ -34,6 +34,10 @@
         <property name="text">
          <string>Трансліт!</string>
         </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>icons/books.png</normaloff>icons/books.png</iconset>
+        </property>
        </widget>
       </item>
       <item>
@@ -46,6 +50,10 @@
         </property>
         <property name="text">
          <string>Ачысціць</string>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>icons/broom.png</normaloff>icons/broom.png</iconset>
         </property>
        </widget>
       </item>
@@ -98,6 +106,10 @@
             <property name="text">
              <string>Адкрыць...</string>
             </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>icons/folder-open-document-text.png</normaloff>icons/folder-open-document-text.png</iconset>
+            </property>
            </widget>
           </item>
          </layout>
@@ -118,6 +130,10 @@
            <widget class="QPushButton" name="openFileToPushButton">
             <property name="text">
              <string>Адкрыць...</string>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>icons/folder-open-document-text.png</normaloff>icons/folder-open-document-text.png</iconset>
             </property>
            </widget>
           </item>

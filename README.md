@@ -23,3 +23,9 @@ npx husky install
 
 ## Running
 Run `belat.pyw` to run GUI program without console, or run `belat.py` to open GUI program with console. You can also run `cbelat.py` to open console-only version.
+
+## Credits
+
+The project uses `Fugue` Icons, thanks to [Yusuke Kamiyamane](https://p.yusukekamiyamane.com/) for his great and free icon pack!
+
+[![License: CC BY 3.0](https://img.shields.io/badge/License-CC_BY_3.0-lightgrey.svg)](https://creativecommons.org/licenses/by/3.0/)

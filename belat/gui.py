@@ -192,7 +192,9 @@ class MainWindow(QtWidgets.QMainWindow):
         uic.loadUi(os.path.join(RESOURCE_PATH, "ui", "belat.ui"), self)
 
         self.centralWidget.setContentsMargins(11, 11, 11, 0)
-        self.setWindowIcon(QtGui.QIcon(os.path.join(RESOURCE_PATH, "ui", "icon.png")))
+        self.setWindowIcon(
+            QtGui.QIcon(os.path.join(RESOURCE_PATH, "ui", "icons", "favicon.png"))
+        )
         self.setWindowTitle(f"belat v{belat.__version__}")
 
         # region Initializing error window
@@ -200,7 +202,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.err_msg.setIcon(QMessageBox.Icon.Critical)
         self.err_msg.setWindowTitle("Памылка")
         self.err_msg.setWindowIcon(
-            QtGui.QIcon(os.path.join(RESOURCE_PATH, "ui", "error.png"))
+            QtGui.QIcon(
+                os.path.join(RESOURCE_PATH, "ui", "icons", "exclamation-red.png")
+            )
         )
         # endregion
 
