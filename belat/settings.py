@@ -5,15 +5,19 @@ import sys
 from pathlib import Path
 from typing import Dict, Optional
 
+from dotenv import load_dotenv
+
 from belat.schemes import Scheme
+
+load_dotenv("./.env", verbose=True)
 
 BASE_DIR: Path = Path(
     os.environ.get("BELAT_BASE_DIR", os.path.join(os.path.expanduser("~"), ".belat"))
 )
 
-DEBUG: bool = os.environ.get("BELAT_DEBUG", True) in ["t", True, "true"]
+DEBUG: bool = os.environ.get("BELAT_DEBUG", False) in ["t", True, "true"]
 
-LOG_LVL: str = "DEBUG" if DEBUG else "WARNING"
+LOG_LVL: str = "DEBUG" if DEBUG else "INFO"
 
 LOG_DIR: Path = Path(os.path.join(BASE_DIR, "logs"))
 

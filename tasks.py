@@ -3,11 +3,16 @@ from io import StringIO
 
 from invoke import run, task
 
-os.environ["BELAT_BASE_DIR"] = ".belat"
+
+@task
+def clear(context):
+    os.system("rm -rf build/*.*")
+    os.system("rm -rf dist/*.*")
+    os.system("rm -f *.spec")
 
 
 @task
-def build(context):
+def build(context, folder_mode=False):
     BELAT_VERSION = (
         open(os.path.join("belat", "VERSION.txt"), "r", encoding="utf8").read().strip()
     )
@@ -15,7 +20,7 @@ def build(context):
     run(
         f'pyinstaller \
 --name=belat-v{BELAT_VERSION} \
---noconfirm --onefile --windowed \
+--noconfirm {"--onefile" if not folder_mode else ""} --windowed \
 --icon "./ui/icons/favicon.ico" \
 --add-data "./belat;belat/" \
 --add-data "./ui;ui/" \
