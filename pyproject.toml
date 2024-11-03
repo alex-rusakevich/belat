@@ -34,12 +34,12 @@ Source = "https://github.com/Alexander Rusakevich/belat"
 [tool.hatch.version]
 path = "src/belat/__about__.py"
 
-[tool.hatch.envs.types]
-extra-dependencies = [
-  "mypy>=1.0.0",
+[tool.hatch.envs.test]
+dependencies = [
+  "pytest",
+  "pytest-cov",
+  "coverage"
 ]
-[tool.hatch.envs.types.scripts]
-check = "mypy --install-types --non-interactive {args:src/belat tests}"
 
 [tool.coverage.run]
 source_pkgs = ["belat", "tests"]
