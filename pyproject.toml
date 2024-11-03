@@ -1,0 +1,64 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "belat"
+dynamic = ["version"]
+description = 'Converter of belarussian latin font to cyrillic (and back)'
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+keywords = []
+authors = [
+  { name = "Alexander Rusakevich", email = "mr.alexander.rusakevich@gmail.com" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = ["lxml", "beautifulsoup4"]
+
+[project.urls]
+Documentation = "https://github.com/Alexander Rusakevich/belat#readme"
+Issues = "https://github.com/Alexander Rusakevich/belat/issues"
+Source = "https://github.com/Alexander Rusakevich/belat"
+
+[tool.hatch.version]
+path = "src/belat/__about__.py"
+
+[tool.hatch.envs.types]
+extra-dependencies = [
+  "mypy>=1.0.0",
+]
+[tool.hatch.envs.types.scripts]
+check = "mypy --install-types --non-interactive {args:src/belat tests}"
+
+[tool.coverage.run]
+source_pkgs = ["belat", "tests"]
+branch = true
+parallel = true
+omit = [
+  "src/belat/__about__.py",
+]
+
+[tool.coverage.paths]
+belat = ["src/belat", "*/belat/src/belat"]
+tests = ["tests", "*/belat/tests"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
+
+[project.scripts]
+belat = "belat.cli:main"
